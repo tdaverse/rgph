@@ -23,7 +23,7 @@
 #' )
 #' print(x)
 #'
-#' read_reeb_graph("files/mergepairingtest.txt")
+#' read_reeb_graph("files/running_example_reeb_graph.txt")
 #'
 #' @export
 reeb_graph <- function(values, edgelist) {

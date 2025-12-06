@@ -1,20 +1,6 @@
-#' Run Merge Pairing Algorithm via Java
-#'
-#' This function calls a Java method using the \code{rJava} package to execute the merge pairing algorithm.
-#' Ensure the Java Virtual Machine (JVM) is initialized and the required class is available in the classpath.
-#'
-#' @return The output returned by the Java method, typically \code{NULL}, \code{character}, or \code{numeric}, depending on implementation.
-#' @examples
-#' ( ex_rg <- read_reeb_graph("files/running_example_reeb_graph.txt") )
-#' ex_ph <- mergepairing(
-#'   seq_along(ex_rg$values) - 1, ex_rg$values,
-#'   ex_rg$edgelist[, 1], ex_rg$edgelist[, 2]
-#' )
-#' print(ex_ph)
-#' attr(ex_ph, "elapsedTime")
-#'
-#' @export
-mergepairing <- function(vertex_indices, vertex_values, edges_from, edges_to) {
+
+
+propagatepair <- function(vertex_indices, vertex_heights, edges_from, edges_to) {
 
   # change value to height
   # do floats and doubles differ for R and java
@@ -23,39 +9,39 @@ mergepairing <- function(vertex_indices, vertex_values, edges_from, edges_to) {
   files <- .jarray(c("./files/mergepairingtest.txt"))
   # converting R vectors into the required format for java
   vertex_indices_java <- .jarray(as.integer(vertex_indices))
-  vertex_values_java <- .jfloat(vertex_values)
+  vertex_heights_java <- .jfloat(vertex_heights)
   edges_from_java <- .jarray(as.integer(edges_from))
   edges_to_java <- .jarray(as.integer(edges_to))
 
   # creating a java object of type MergePairingCLI
-  jhw <- .jnew("usf.saav.cmd.MergePairingCLI")
-  # calling method to run merge pairing algorithm for custom lists
-  .jcall(jhw, "V", "mainR", vertex_indices_java, vertex_values_java, edges_from_java, edges_to_java)
+  jhw <- .jnew("usf.saav.cmd.PPPairingCLI")
+  # calling method to run propagate pairing algorithm for custom lists
+  .jcall(jhw, "V", "mainR", vertex_indices_java, vertex_heights_java, edges_from_java, edges_to_java)
 
   # retrieving the prepopulated list
-  rlist <- .jcall("usf/saav/cmd/MergePairingCLI",
-                 "[Ljava/lang/String;", "getFinalGraph")
+  rlist <- .jcall("usf/saav/cmd/PPPairingCLI",
+                  "[Ljava/lang/String;", "getFinalGraph")
 
   # retrieving the separate lists
-  pValues <- .jcall("usf/saav/cmd/MergePairingCLI",
+  pValues <- .jcall("usf/saav/cmd/PPPairingCLI",
                     "[F", "getPValues")
 
-  pRealValues <- .jcall("usf/saav/cmd/MergePairingCLI",
+  pRealValues <- .jcall("usf/saav/cmd/PPPairingCLI",
                         "[F", "getPRealValues")
 
-  vValues <- .jcall("usf/saav/cmd/MergePairingCLI",
+  vValues <- .jcall("usf/saav/cmd/PPPairingCLI",
                     "[F", "getVValues")
 
-  vRealValues <- .jcall("usf/saav/cmd/MergePairingCLI",
+  vRealValues <- .jcall("usf/saav/cmd/PPPairingCLI",
                         "[F", "getVRealValues")
 
-  pGlobalIDs <- .jcall("usf/saav/cmd/MergePairingCLI",
+  pGlobalIDs <- .jcall("usf/saav/cmd/PPPairingCLI",
                        "[I", "getPGlobalIDs")
 
-  vGlobalIDs <- .jcall("usf/saav/cmd/MergePairingCLI",
+  vGlobalIDs <- .jcall("usf/saav/cmd/PPPairingCLI",
                        "[I", "getVGlobalIDs")
 
-  elapsedTime <- .jcall("usf/saav/cmd/MergePairingCLI",
+  elapsedTime <- .jcall("usf/saav/cmd/PPPairingCLI",
                         "D", "getElapsedTime")
 
   res <- data.frame(
@@ -71,7 +57,8 @@ mergepairing <- function(vertex_indices, vertex_values, edges_from, edges_to) {
   res
 }
 
-test <- function() {
+
+test_pp <- function() {
   vertex_indices <- c(
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
     11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -105,6 +92,6 @@ test <- function() {
     30, 32, 31, 33, 34, 35, 36, 38, 40, 39
   )
 
-  print(mergepairing(vertex_indices, vertex_values, edges_from, edges_to))
+  print(propagatepair(vertex_indices, vertex_values, edges_from, edges_to))
 
 }

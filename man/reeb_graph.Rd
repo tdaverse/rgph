@@ -47,7 +47,8 @@ x <- reeb_graph(
   values = c(0, .4, .6, 1),
   edgelist = rbind(c(0, 1), c(0, 2), c(1, 3), c(2, 3))
 )
+print(x)
 
-read_reeb_graph("files/mergepairingtest.txt")
+read_reeb_graph("files/running_example_reeb_graph.txt")
 
 }

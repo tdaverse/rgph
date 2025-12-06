@@ -15,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class TestResults {
 
@@ -290,13 +289,13 @@ public class TestResults {
 
     // UF version
 
-    public static MergePairingResult runAlgo(int[] vertexIds,
-                                                        float[] vertexWeights,
-                                                        int[] edgeOriginIds,
-                                                        int[] edgeDestinationIds,
-                                                        Pairing pairing,
-                                                        Timer timer,
-                                                        boolean verbose) throws Exception {
+    public static PairingResult runAlgo(int[] vertexIds,
+                                        float[] vertexWeights,
+                                        int[] edgeOriginIds,
+                                        int[] edgeDestinationIds,
+                                        Pairing pairing,
+                                        Timer timer,
+                                        boolean verbose) throws Exception {
         Timer t = new TimerMillisecond();
 
         if (verbose) System.out.println();
@@ -316,7 +315,7 @@ public class TestResults {
         }
         timer.end();
 
-        MergePairingResult result = new MergePairingResult(rm1, timer.getElapsedMilliseconds());
+        PairingResult result = new PairingResult(rm1, timer.getElapsedMilliseconds());
 
         if (verbose) System.out.println(" Total Loops: " + countLoops(rm1));
         if (verbose)
