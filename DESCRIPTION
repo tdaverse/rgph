@@ -1,6 +1,6 @@
-Package: ReebGraphPairing
+Package: rgp
 Type: Package
-Title: Title: Interface to Java-Based ReebGraphPairing World Functionality Using rJava
+Title: Compute Extended Persistent Homology of Reeb Graphs
 Version: 0.1.0
 Authors@R: c(
     person(
@@ -12,9 +12,31 @@ Authors@R: c(
       "Shubham", "Singh",
       email = "shubhamus16091998@example.com",
       role = "aut"
+    ),
+    person(
+      "Jason Cory", "Brunson",
+      email = "cornelioid@gmail.com",
+      role = c("aut", "ldr"),
+      comment = c(ORCID = "0000-0003-3126-9494")
+    ),
+    person(
+      "Paul", "Rosen",
+      email = "paul.rosen@utah.edu",
+      role = c("cph", "ctb"),
+      comment = c("ReebGraphPairing; GPL-3 license",
+                  ORCID = "0000-0002-0873-9518")
+    ),
+    person(
+      "Junyi", "Tu",
+      email = "JXTU@salisbury.edu",
+      role = c("cph", "ctb"),
+      comment = c("ReebGraphPairing; GPL-3 license",
+                  ORCID = "0000-0001-7026-7454")
     )
   )
-Description: This is a simple example package that prints 'Hello, world!' to the console.
+Description: Interface
+    to the ReebGraphPairing Java program <doi:10.1007/978-3-030-33720-9_8>
+    via rJava.
 Depends: R (>= 2.7.0), rJava (>= 0.5-0)
 SystemRequirements: Java (>= 1.5)
 License: GPL-3
