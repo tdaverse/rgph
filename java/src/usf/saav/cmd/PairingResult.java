@@ -4,12 +4,12 @@ import usf.saav.topology.reebgraph.ReebGraph;
 
 import java.util.ArrayList;
 
-public class MergePairingResult {
+public class PairingResult {
 
     private ArrayList<ReebGraph> reebGraphArrayList;
     private double elapsedTime;
 
-    public MergePairingResult(ArrayList<ReebGraph> reebGraphArrayList, double elapsedTime) {
+    public PairingResult(ArrayList<ReebGraph> reebGraphArrayList, double elapsedTime) {
         this.reebGraphArrayList = reebGraphArrayList;
         this.elapsedTime = elapsedTime;
     }

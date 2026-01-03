@@ -90,7 +90,7 @@ public class MergePairingCLI {
                                     int[] edgeOriginIds,
                                     int[] edgeDestinationIds) {
         try {
-            usf.saav.cmd.MergePairingResult result = TestResults.runAlgo(vertexIds,
+            PairingResult result = TestResults.runAlgo(vertexIds,
                     vertexWeights,
                     edgeOriginIds,
                     edgeDestinationIds,
