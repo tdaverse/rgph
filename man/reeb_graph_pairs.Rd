@@ -29,7 +29,8 @@ methods from \code{ReebGraphPairing}. Ensure the Java Virtual Machine (JVM) is
 initialized and the required class is available in the class path.
 }
 \examples{
-( ex_rg <- read_reeb_graph("files/running_example_reeb_graph.txt") )
+ex_sf <- system.file("extdata", "running_example_reeb_graph.txt", package = "rgp")
+( ex_rg <- read_reeb_graph(ex_sf) )
 ( ex_cp <- reeb_graph_pairs(ex_rg) )
 attr(ex_cp, "method")
 attr(ex_cp, "elapsedTime")
