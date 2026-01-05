@@ -1,7 +1,11 @@
+# Mac
+**/.DS_Store
 
+# R project
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
 
+# custom
 ignore
