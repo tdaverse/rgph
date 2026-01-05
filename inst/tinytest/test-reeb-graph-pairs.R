@@ -1,6 +1,6 @@
 # check that both methods return the correct pairs on the running example
 
-f <- system.file("extdata", "running_example_reeb_graph.txt", package = "rgp")
+f <- system.file("extdata", "running_example.txt", package = "rgp")
 x <- read_reeb_graph(f)
 p <- reeb_graph_pairs(x, method = "single")
 p_ <- p[order(p$birth_index, -p$death_index), ]

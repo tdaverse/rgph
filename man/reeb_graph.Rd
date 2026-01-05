@@ -49,8 +49,8 @@ x <- reeb_graph(
 )
 print(x)
 
-mpt <- system.file("extdata", "mergepairingtest.txt", package = "rgp")
-( y <- read_reeb_graph(mpt) )
+t10 <- system.file("extdata", "10_tree_iterations.txt", package = "rgp")
+( y <- read_reeb_graph(t10) )
 
 reeb_graph_pairs(x, method = "multi_pass")
 reeb_graph_pairs(y, method = "multi_pass")

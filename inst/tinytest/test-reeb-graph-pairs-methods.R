@@ -1,5 +1,11 @@
 # check that single- and multi-pass methods agree on a non-trivial example
 
+# check for agreement on a non-trivial example
+
+# read from file
+f <- system.file("extdata", "10_tree_iterations.txt", package = "rgp")
+rg1 <- read_reeb_graph(f)
+# define within R session
 vertex_values <- c(
   0.0,
   1.3862943611198906, 3.295836866004329, 5.545177444479562, 8.047189562170502,
@@ -25,12 +31,13 @@ edges_to <- c(
   20, 21, 22, 24, 23, 25, 26, 27, 28, 37,
   30, 32, 31, 33, 34, 35, 36, 38, 40, 39
 )
-# Reeb graph object
-rg <- reeb_graph(vertex_values, cbind( edges_to, edges_from ))
+rg2 <- reeb_graph(vertex_values, cbind( edges_from, edges_to ))
+# check equality
+expect_equal(rg1, rg2, check.attributes = FALSE)
 
 # merge pairing
-ph1 <- reeb_graph_pairs(rg, "single_pass")
+ph1 <- reeb_graph_pairs(rg1, "single_pass")
 # propagate pairing
-ph2 <- reeb_graph_pairs(rg, "multi_pass")
+ph2 <- reeb_graph_pairs(rg2, "multi_pass")
 # check equality
 expect_equal(ph1, ph2, check.attributes = FALSE)

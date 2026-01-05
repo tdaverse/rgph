@@ -16,7 +16,7 @@
 #'   attributes `"method"` for the method used and `"elapsedTime"` for the
 #'   elapsed time.
 #' @examples
-#' ex_sf <- system.file("extdata", "running_example_reeb_graph.txt", package = "rgp")
+#' ex_sf <- system.file("extdata", "running_example.txt", package = "rgp")
 #' ( ex_rg <- read_reeb_graph(ex_sf) )
 #' ( ex_cp <- reeb_graph_pairs(ex_rg) )
 #' attr(ex_cp, "method")
