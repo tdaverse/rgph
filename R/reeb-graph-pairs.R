@@ -21,6 +21,9 @@
 #' ( ex_cp <- reeb_graph_pairs(ex_rg) )
 #' attr(ex_cp, "method")
 #' attr(ex_cp, "elapsedTime")
+#'
+#' @template ref-tu2019
+#' @template ref-reebgraphpairing
 #' @export
 reeb_graph_pairs <- function(x, method = "multi_pass") {
 

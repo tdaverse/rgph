@@ -25,6 +25,9 @@ read_reeb_graph(file)
 \item{...}{Additional arguments passed to \code{\link[base:format]{base::format()}}.}
 
 \item{n}{Integer number of edges to print.}
+
+\item{file}{A plain text file containing Reeb graph data formatted as at
+\code{ReebGraphPairing}.}
 }
 \value{
 An object of class \code{"reeb_graph"}, which is a list of two elements:
@@ -55,4 +58,7 @@ t10 <- system.file("extdata", "10_tree_iterations.txt", package = "rgp")
 reeb_graph_pairs(x, method = "multi_pass")
 reeb_graph_pairs(y, method = "multi_pass")
 
+}
+\references{
+\url{https://github.com/USFDataVisualization/ReebGraphPairing/}
 }

@@ -2,7 +2,6 @@
 
 S3method(format,reeb_graph)
 S3method(print,reeb_graph)
-export(print.reeb_graph)
 export(read_reeb_graph)
 export(reeb_graph)
 export(reeb_graph_pairs)

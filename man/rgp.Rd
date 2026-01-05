@@ -6,7 +6,7 @@
 \alias{rgp}
 \title{rgp: Compute Extended Persistent Homology of Reeb Graphs}
 \description{
-Interface to the ReebGraphPairing Java program \doi{10.1007/978-3-030-33720-9_8} via rJava.
+Interface to the `ReebGraphPairing` Java program \doi{10.1007/978-3-030-33720-9_8} via the rJava package.
 }
 \author{
 \strong{Maintainer}: Satyajit Mohanty \email{mohantysatyajit57@gmail.com}

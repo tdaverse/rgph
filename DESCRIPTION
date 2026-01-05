@@ -35,8 +35,8 @@ Authors@R: c(
     )
   )
 Description: Interface
-    to the ReebGraphPairing Java program <doi:10.1007/978-3-030-33720-9_8>
-    via rJava.
+    to the `ReebGraphPairing` Java program <doi:10.1007/978-3-030-33720-9_8>
+    via the rJava package.
 Depends: R (>= 2.7.0), rJava (>= 0.5-0)
 Suggests:
     tinytest

@@ -34,4 +34,14 @@ ex_sf <- system.file("extdata", "running_example.txt", package = "rgp")
 ( ex_cp <- reeb_graph_pairs(ex_rg) )
 attr(ex_cp, "method")
 attr(ex_cp, "elapsedTime")
+
+}
+\references{
+Tu J, Hajij M, Rosen P. Propagate and Pair: A Single-Pass Approach to
+Critical Point Pairing in Reeb Graphs. In: Bebis G, Boyle R, Parvin B, &al,
+eds. \emph{Advances in Visual Computing. Lecture Notes in Computer Science}.
+Springer International Publishing; 2019:99--113.
+\doi{10.1007/978-3-030-33720-9_8}
+
+\url{https://github.com/USFDataVisualization/ReebGraphPairing/}
 }

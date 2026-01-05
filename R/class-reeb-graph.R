@@ -12,6 +12,8 @@
 #' @param x Object of class `"reeb_graph"`.
 #' @param ... Additional arguments passed to [base::format()].
 #' @param n Integer number of edges to print.
+#' @param file A plain text file containing Reeb graph data formatted as at
+#'   `ReebGraphPairing`.
 #' @returns An object of class `"reeb_graph"`, which is a list of two elements:
 #'
 #' - `values`: Numeric vector of function values at vertices.
@@ -29,6 +31,7 @@
 #' reeb_graph_pairs(x, method = "multi_pass")
 #' reeb_graph_pairs(y, method = "multi_pass")
 #'
+#' @template ref-reebgraphpairing
 #' @export
 reeb_graph <- function(values, edgelist) {
   check_reeb_data(values, edgelist)
@@ -60,7 +63,6 @@ check_reeb_data <- function(values, edgelist) {
 
 #' @rdname reeb_graph
 #' @export
-#' @export print.reeb_graph
 print.reeb_graph <- function(x, ..., n = NULL) {
   cat(format(x, ..., n = n), sep = "\n")
 }
