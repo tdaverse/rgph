@@ -44,6 +44,15 @@ for (alg in c("single_pass", "multi_pass")) {
   expect_equal(p_$birth_index, c(0L, 1L, 2L))
   expect_equal(p_$death_index, c(4L, 3L, 3L))
 
+  # more complex forks
+  r <- reeb_graph(c(0,0,0,.5,1,1), c( 0,3, 1,3, 2,3, 3,4, 3,5 ))
+  p <- reeb_graph_pairs(r, method = alg)
+  p_ <- p[order(p$birth_index, -p$death_index), ]
+  expect_equal(p_$birth_value, c(0., 0., 0., .5))
+  expect_equal(p_$death_value, c(1., .5, .5, 1.))
+  expect_equal(p_$birth_index, c(0L, 1L, 2L, 3L))
+  expect_equal(p_$death_index, c(5L, 3L, 3L, 4L))
+
   # disconnected graph
   r <- reeb_graph(c(0,1,0,.3,.7,1), c( 0,1, 2,4, 3,4, 4,5 ))
   p <- reeb_graph_pairs(r, method = alg)
