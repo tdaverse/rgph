@@ -4,7 +4,11 @@
 \alias{reeb_graph_persistence}
 \title{Compute Persistent Homology of a Reeb Graph}
 \usage{
-reeb_graph_persistence(x, method = "multi_pass", value = "value")
+reeb_graph_persistence(
+  x,
+  method = c("single_pass", "multi_pass"),
+  value = c("value", "index", "order")
+)
 }
 \arguments{
 \item{x}{A \code{\link{reeb_graph}} object.}

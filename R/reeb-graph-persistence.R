@@ -35,7 +35,11 @@
 #' phutil::get_pairs(t10_ph, dimension = 1)
 #'
 #' @export
-reeb_graph_persistence <- function(x, method = "multi_pass", value = "value") {
+reeb_graph_persistence <- function(
+    x,
+    method = c("single_pass", "multi_pass"),
+    value = c("value", "index", "order")
+) {
 
   stopifnot(inherits(x, "reeb_graph"))
   method <- match.arg(tolower(method), c("single_pass", "multi_pass"))
