@@ -5,7 +5,7 @@
 #'
 #' @details Vertex indices start at zero, for consistency with examples. The
 #'   positions of `values` and the integer values in `edgelist` will correspond
-#'   to the same vertices; `length(values) - 1L` must bound `max(edgelist)`.
+#'   to the same vertices; `length(values)` must bound `max(edgelist)`.
 #'
 #' @param values Numeric vector of function values at vertices.
 #' @param edgelist 2-column integer matrix of linked vertex pairs.
@@ -21,7 +21,7 @@
 #' @examples
 #' x <- reeb_graph(
 #'   values = c(0, .4, .6, 1),
-#'   edgelist = rbind(c(0, 1), c(0, 2), c(1, 3), c(2, 3))
+#'   edgelist = rbind( c(1,2), c(1,3), c(2,4), c(3,4))
 #' )
 #' print(x)
 #'
@@ -55,8 +55,8 @@ check_reeb_data <- function(values, edgelist) {
     ( is.vector(edgelist) && length(edgelist) %% 2L == 0L ) ||
       ( is.matrix(edgelist) && ncol(edgelist) == 2L ),
     all(! is.na(edgelist)),
-    min(edgelist) >= 0,
-    max(edgelist) <= length(values) - 1L,
+    min(edgelist) >= 1L,
+    max(edgelist) <= length(values),
     all(as.vector(edgelist) - as.integer(edgelist) == 0)
   )
 }
@@ -78,7 +78,7 @@ format.reeb_graph <- function(x, ..., n = NULL) {
   fpairs <- matrix(
     paste0(
       as.vector(x$edgelist[seq(n), ]),
-      " [", x$values[as.vector(x$edgelist[seq(n), ]) + 1L], "]"
+      " [", x$values[as.vector(x$edgelist[seq(n), ])], "]"
     ),
     nrow = n, ncol = 2L
   )
@@ -110,6 +110,8 @@ read_reeb_graph <- function(file) {
   fromlist <- as.integer(gsub("^e ([0-9]+) [0-9]+$", "\\1", edgelist))
   tolist <- as.integer(gsub("^e [0-9]+ ([0-9]+)$", "\\1", edgelist))
   edgelist <- unname(cbind(fromlist, tolist))
+  # index from 1 in R
+  edgelist <- edgelist + 1L
 
   reeb_graph(values = values, edgelist = edgelist)
 }

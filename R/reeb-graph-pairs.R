@@ -56,9 +56,9 @@ reeb_graph_pairs <- function(
   # REVIEW: Are floats in Java as precise as doubles in R?
   vertex_heights_java <- .jfloat(x$values)
   # first column is the origin vertex
-  edges_from_java <- .jarray(as.integer(x$edgelist[, 1L]))
+  edges_from_java <- .jarray(as.integer(x$edgelist[, 1L] - 1L))
   # second column is the destination vertex
-  edges_to_java <- .jarray(as.integer(x$edgelist[, 2L]))
+  edges_to_java <- .jarray(as.integer(x$edgelist[, 2L] - 1L))
 
   # the name of the Java class we need to instantiate for the pairing method
   pairing_java_object <- switch(
@@ -84,12 +84,12 @@ reeb_graph_pairs <- function(
   # rlist <- .jcall(java_file_path, "[Ljava/lang/String;", "getFinalGraph")
 
   # retrieve the separate lists
-  pValues <- .jcall(java_file_path, "[F", "getPValues")
   pRealValues <- .jcall(java_file_path, "[F", "getPRealValues")
-  vValues <- .jcall(java_file_path, "[F", "getVValues")
   vRealValues <- .jcall(java_file_path, "[F", "getVRealValues")
-  pGlobalIDs <- .jcall(java_file_path, "[I", "getPGlobalIDs")
-  vGlobalIDs <- .jcall(java_file_path, "[I", "getVGlobalIDs")
+  pValues <- .jcall(java_file_path, "[F", "getPValues") + 1L
+  vValues <- .jcall(java_file_path, "[F", "getVValues") + 1L
+  pGlobalIDs <- .jcall(java_file_path, "[I", "getPGlobalIDs") + 1L
+  vGlobalIDs <- .jcall(java_file_path, "[I", "getVGlobalIDs") + 1L
   elapsedTime <- .jcall(java_file_path, "D", "getElapsedTime")
 
   # un-reverse value function
