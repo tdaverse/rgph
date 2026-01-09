@@ -15,6 +15,9 @@
 #'   2019).
 #'
 #' @param x A [`reeb_graph`][reeb_graph] object.
+#' @param sublevel Logical; whether to take the sublevel set filtration (`TRUE`,
+#'   the default) or else the superlevel set filtration (via reversing
+#'   `x$values` before paring critical points.
 #' @param method Character; the pairing method to use. Matched to
 #'   `"single_pass"` (the default) or `"multi_pass"`.
 #' @return A data frame containing the six output vectors returned by the Java
@@ -29,15 +32,22 @@
 #' attr(ex_cp, "method")
 #' attr(ex_cp, "elapsedTime")
 #'
+#' reeb_graph_pairs(ex_rg, sublevel = FALSE)
+#'
 #' @template ref-reebgraphpairing
 #' @template ref-tu2019
 #' @export
 reeb_graph_pairs <- function(
     x,
+    sublevel = TRUE,
     method = c("single_pass", "multi_pass")
 ) {
 
   stopifnot(inherits(x, "reeb_graph"))
+  # reverse value function
+  if (! is.logical(sublevel) || is.na(sublevel))
+    stop("`sublevel` must be `TRUE` or `FALSE`.")
+  if (! sublevel) x$values <- -x$values
   # dynamically decide which pairing method to use based on the method
   method <- match.arg(tolower(method), c("single_pass", "multi_pass"))
 
@@ -81,6 +91,12 @@ reeb_graph_pairs <- function(
   pGlobalIDs <- .jcall(java_file_path, "[I", "getPGlobalIDs")
   vGlobalIDs <- .jcall(java_file_path, "[I", "getVGlobalIDs")
   elapsedTime <- .jcall(java_file_path, "D", "getElapsedTime")
+
+  # un-reverse value function
+  if (! sublevel) {
+    pRealValues <- -pRealValues
+    vRealValues <- -vRealValues
+  }
 
   # assemble as data frame
   res <- data.frame(

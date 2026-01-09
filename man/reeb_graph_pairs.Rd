@@ -4,10 +4,14 @@
 \alias{reeb_graph_pairs}
 \title{Pair Reeb Graph Critical Points via Java}
 \usage{
-reeb_graph_pairs(x, method = c("single_pass", "multi_pass"))
+reeb_graph_pairs(x, sublevel = TRUE, method = c("single_pass", "multi_pass"))
 }
 \arguments{
 \item{x}{A \code{\link{reeb_graph}} object.}
+
+\item{sublevel}{Logical; whether to take the sublevel set filtration (\code{TRUE},
+the default) or else the superlevel set filtration (via reversing
+\code{x$values} before paring critical points.}
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
@@ -41,6 +45,8 @@ ex_sf <- system.file("extdata", "running_example.txt", package = "rgp")
 ( ex_cp <- reeb_graph_pairs(ex_rg) )
 attr(ex_cp, "method")
 attr(ex_cp, "elapsedTime")
+
+reeb_graph_pairs(ex_rg, sublevel = FALSE)
 
 }
 \references{
