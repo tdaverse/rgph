@@ -87,15 +87,15 @@ for (alg in c("single_pass", "multi_pass")) {
   expect_equal(p_, p12_, check.attributes = FALSE)
 
   # adjacent nodes at equal height
-  r <- reeb_graph(c(0,.5,.5,1), c( 0,1, 0,2, 1,2, 1,3, 2,3 ))
+  r <- reeb_graph(c(0,.5,.5,1), c( 1,2, 1,3, 2,3, 2,4, 3,4 ))
   p <- reeb_graph_pairs(r, method = alg)
   p_ <- p[order(p$lo_index, -p$hi_index), ]
   expect_equal(p_$lo_type, c("LEAF_MIN", "UPFORK", "UPFORK"))
   expect_equal(p_$hi_type, c("LEAF_MAX", "DOWNFORK", "DOWNFORK"))
   expect_equal(p_$lo_value, c(0., 0., .5))
   expect_equal(p_$hi_value, c(1., .5, 1.))
-  expect_equal(p_$lo_index, c(0L, 0L, 1L))
-  expect_equal(p_$hi_index, c(3L, 2L, 3L))
+  expect_equal(p_$lo_index, c(1L, 1L, 2L))
+  expect_equal(p_$hi_index, c(4L, 3L, 4L))
 
 }
 

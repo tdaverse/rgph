@@ -13,5 +13,5 @@ expect_equal(
     # # persistence diagram
     # c( 0, 11, 13,  9, 12,  7,  4,  1),
     # c(15,  3, 14,  5,  8, 10,  6,  2)
-  )
+  ) + 1
 )
