@@ -21,6 +21,9 @@
 #'   Carrière & Oudot (2018).
 #'
 #' @param x A [`reeb_graph`][reeb_graph] object.
+#' @param sublevel Logical; whether to take the sublevel set filtration (`TRUE`,
+#'   the default) or else the superlevel set filtration (via reversing
+#'   `x$values` before paring critical points.
 #' @param method Character; the pairing method to use. Matched to
 #'   `"single_pass"` (the default) or `"multi_pass"`.
 #' @return A data frame containing eight output vectors returned by the Java
@@ -35,16 +38,23 @@
 #' attr(ex_cp, "method")
 #' attr(ex_cp, "elapsedTime")
 #'
+#' reeb_graph_pairs(ex_rg, sublevel = FALSE)
+#'
 #' @template ref-reebgraphpairing
 #' @template ref-tu2019
 #' @template ref-carriere2018
 #' @export
 reeb_graph_pairs <- function(
     x,
+    sublevel = TRUE,
     method = c("single_pass", "multi_pass")
 ) {
 
   stopifnot(inherits(x, "reeb_graph"))
+  # reverse value function
+  if (! is.logical(sublevel) || is.na(sublevel))
+    stop("`sublevel` must be `TRUE` or `FALSE`.")
+  if (! sublevel) x$values <- -x$values
   # dynamically decide which pairing method to use based on the method
   method <- match.arg(tolower(method), c("single_pass", "multi_pass"))
 
@@ -53,9 +63,9 @@ reeb_graph_pairs <- function(
   # REVIEW: Are floats in Java as precise as doubles in R?
   vertex_heights_java <- .jfloat(x$values)
   # first column is the origin vertex
-  edges_from_java <- .jarray(as.integer(x$edgelist[, 1L]))
+  edges_from_java <- .jarray(as.integer(x$edgelist[, 1L] - 1L))
   # second column is the destination vertex
-  edges_to_java <- .jarray(as.integer(x$edgelist[, 2L]))
+  edges_to_java <- .jarray(as.integer(x$edgelist[, 2L] - 1L))
 
   # the name of the Java class we need to instantiate for the pairing method
   pairing_java_object <- switch(
@@ -81,15 +91,21 @@ reeb_graph_pairs <- function(
   # rlist <- .jcall(java_file_path, "[Ljava/lang/String;", "getFinalGraph")
 
   # retrieve the separate lists
-  vType <- .jcall(java_file_path, "[S", "getVTypes")
   pType <- .jcall(java_file_path, "[S", "getPTypes")
-  pValues <- .jcall(java_file_path, "[F", "getPValues")
+  vType <- .jcall(java_file_path, "[S", "getVTypes")
   pRealValues <- .jcall(java_file_path, "[F", "getPRealValues")
-  vValues <- .jcall(java_file_path, "[F", "getVValues")
   vRealValues <- .jcall(java_file_path, "[F", "getVRealValues")
-  pGlobalIDs <- .jcall(java_file_path, "[I", "getPGlobalIDs")
-  vGlobalIDs <- .jcall(java_file_path, "[I", "getVGlobalIDs")
+  pValues <- .jcall(java_file_path, "[F", "getPValues") + 1L
+  vValues <- .jcall(java_file_path, "[F", "getVValues") + 1L
+  pGlobalIDs <- .jcall(java_file_path, "[I", "getPGlobalIDs") + 1L
+  vGlobalIDs <- .jcall(java_file_path, "[I", "getVGlobalIDs") + 1L
   elapsedTime <- .jcall(java_file_path, "D", "getElapsedTime")
+
+  # un-reverse value function
+  if (! sublevel) {
+    pRealValues <- -pRealValues
+    vRealValues <- -vRealValues
+  }
 
   # assemble as data frame
   res <- data.frame(

@@ -24,20 +24,20 @@ edges_from <- c(
    8,  9, 10, 10, 12, 13, 14, 14, 17, 18,
   18, 20, 21, 22, 22, 23, 25, 26, 26, 27,
   29, 30, 30, 31, 33, 34, 34, 37, 38, 38
-)
+) + 1L
 edges_to <- c(
    1, 13,  2,  3,  4,  5,  6,  8,  7, 17,
    9, 10, 11, 12, 29, 14, 16, 15, 18, 19,
   20, 21, 22, 24, 23, 25, 26, 27, 28, 37,
   30, 32, 31, 33, 34, 35, 36, 38, 40, 39
-)
+) + 1L
 rg2 <- reeb_graph(vertex_values, cbind( edges_from, edges_to ))
 # check equality
 expect_equal(rg1, rg2, check.attributes = FALSE)
 
 # merge pairing
-ph1 <- reeb_graph_pairs(rg1, "single_pass")
+ph1 <- reeb_graph_pairs(rg1, method = "single_pass")
 # propagate pairing
-ph2 <- reeb_graph_pairs(rg2, "multi_pass")
+ph2 <- reeb_graph_pairs(rg2, method = "multi_pass")
 # check equality
 expect_equal(ph1, ph2, check.attributes = FALSE)
