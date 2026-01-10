@@ -2,6 +2,7 @@
 % Please edit documentation in R/reeb-graph-persistence.R
 \name{reeb_graph_persistence}
 \alias{reeb_graph_persistence}
+\alias{crit_pairs_to_persistence}
 \title{Compute Persistent Homology of a Reeb Graph}
 \usage{
 reeb_graph_persistence(
@@ -10,11 +11,14 @@ reeb_graph_persistence(
   method = c("single_pass", "multi_pass"),
   value = c("value", "index", "order")
 )
+
+crit_pairs_to_persistence(x, value = c("value", "index", "order"))
 }
 \arguments{
-\item{x}{A \code{\link{reeb_graph}} object.}
+\item{x}{A \code{\link{reeb_graph}} or
+\code{\link{reeb_graph_pairs}} object.}
 
-\item{sublevel}{Logical; whether to take the sublevel set filtration (\code{TRUE},
+\item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
 the default) or else the superlevel set filtration (via reversing
 \code{x$values} before paring critical points.}
 

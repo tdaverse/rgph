@@ -9,7 +9,7 @@ reeb_graph_pairs(x, sublevel = TRUE, method = c("single_pass", "multi_pass"))
 \arguments{
 \item{x}{A \code{\link{reeb_graph}} object.}
 
-\item{sublevel}{Logical; whether to take the sublevel set filtration (\code{TRUE},
+\item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
 the default) or else the superlevel set filtration (via reversing
 \code{x$values} before paring critical points.}
 
@@ -17,11 +17,30 @@ the default) or else the superlevel set filtration (via reversing
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
 }
 \value{
-A data frame containing eight output vectors returned by the Java
-method: for the low- (\code{lo_}) and high- (\code{hi_}) valued nodes of each pair,
-the \code{type}s (\code{character}), \code{value}s (\code{double}), \code{index}es (\code{integer}), and
-\code{order}s (\code{integer}). The data frame has attributes \code{"method"} for the
-method used and \code{"elapsedTime"} for the elapsed time.
+A data frame with subclass \link{reeb_graph_pairs} containing eight
+vectors output by the Java method characterizing the low- and high-valued
+critical points of each pair:
+\describe{
+\item{\code{lo_type},\code{hi_type}}{
+Character; the type of critical point,
+one of \code{LEAF_MIN}, \code{LEAF_MAX}, \code{UPFORK}, and \code{DOWNFORK}.
+}
+\item{\code{lo_value},\code{hi_value}}{
+Double; the value (stored in \code{x$values}) of the critical point.
+}
+\item{\verb{lo_index,hi_index}}{
+Integer; the index (used in \code{x$edgelist}) of the critical point.
+Regular points will not appear,
+while degenerate critical points will appear multiple times.
+}
+\item{\verb{lo_order,hi_order}}{
+Integer; the order of the critical point in the pairing.
+This is based on the conditioned Reeb graph constructed internally
+so will not be duplicated.
+}
+}
+The data frame also has attributes \code{"method"} for the method used and
+\code{"elapsedTime"} for the elapsed time.
 }
 \description{
 This function calls one of two methods, merge-pair and
@@ -43,6 +62,9 @@ Note that the names of the output data frame use \code{lo_} and \code{hi_} prefi
 in contrast to the Java source code that uses \code{birth_} and \code{death_}. This
 is meant to distinguish the pairs and their metadata from \link[=reeb_graph_persistence]{persistent homology}, which is here reformulated following
 Carrière & Oudot (2018).
+
+The output S3 class is a light wrapper around a data frame containing the
+types, values, indices, and orders of persistent pairs.
 }
 \examples{
 ex_sf <- system.file("extdata", "running_example.txt", package = "rgp")
@@ -52,6 +74,14 @@ attr(ex_cp, "method")
 attr(ex_cp, "elapsedTime")
 
 reeb_graph_pairs(ex_rg, sublevel = FALSE)
+
+x <- reeb_graph(
+  values = c(0, .4, .6, 1),
+  edgelist = c( 1,2, 1,3, 2,4, 3,4 )
+)
+( mp <- reeb_graph_pairs(x) )
+class(mp)
+as.data.frame(mp)
 
 }
 \references{

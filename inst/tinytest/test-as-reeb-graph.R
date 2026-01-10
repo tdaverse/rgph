@@ -1,7 +1,7 @@
 # coercers to Reeb graphs require a complete numeric vertex attribute
 
 if (rlang::is_installed("igraph")) {
-  g <- igraph::graph(c( 1,2, 2,3 ))
+  g <- igraph::make_graph(c( 1,2, 2,3 ))
   igraph::vertex_attr(g, "nonnumeric") <- LETTERS[1:3]
   igraph::vertex_attr(g, "incomplete") <- c(3, NA_real_, 2)
   expect_error(as_reeb_graph(g, values = "nonnumeric"), pattern = "numeric")
@@ -38,7 +38,7 @@ rg <- reeb_graph(values = c(3, 1, 2), edgelist = c( 1,2, 2,3 ))
 
 if (rlang::is_installed("igraph")) {
   g <- as_igraph(rg, values = "height")
-  expect_true(all( igraph::get.edgelist(g) == rg$edgelist ))
+  expect_true(all( igraph::as_edgelist(g) == rg$edgelist ))
   expect_false(is.null(igraph::vertex_attr(g, "height")))
   expect_true(all( igraph::vertex_attr(g, "height") == c(3, 1, 2) ))
 }

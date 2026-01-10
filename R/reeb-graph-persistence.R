@@ -11,6 +11,8 @@
 #'   This function may be deprecated once a `"reeb_graph_pairs"` method is
 #'   written for [phutil::as_persistence()].
 #'
+#' @param x A [`reeb_graph`][reeb_graph] or
+#'   [`reeb_graph_pairs`][reeb_graph_pairs] object.
 #' @inheritParams reeb_graph_pairs
 #' @param value Character; the numerical value used by the persistent pairs.
 #'   Matched to `"value"` (the default), `"index"`, or `"order"`.
@@ -38,38 +40,44 @@ reeb_graph_persistence <- function(
     method = c("single_pass", "multi_pass"),
     value = c("value", "index", "order")
 ) {
-
   stopifnot(inherits(x, "reeb_graph"))
-  value <- match.arg(tolower(value), c("value", "index", "order"))
 
   # pair critical points
   cp <- reeb_graph_pairs(x, sublevel = sublevel, method = method)
-  # check that types are comprehensible
-  stopifnot(
-    all(cp$lo_type == "LEAF_MIN" | cp$lo_type == "UPFORK"),
-    all(cp$hi_type == "LEAF_MAX" | cp$hi_type == "DOWNFORK")
-  )
+
+  # convert critical pairs to persistent homology
+  crit_pairs_to_persistence(cp, value = value)
+}
+
+#' @rdname reeb_graph_persistence
+#' @export
+crit_pairs_to_persistence <- function(
+    x,
+    value = c("value", "index", "order")
+) {
+  stopifnot(inherits(x, "reeb_graph_pairs"))
+  value <- match.arg(tolower(value), c("value", "index", "order"))
 
   # degrees of persistent features
-  ph_deg0 <- cp$lo_type == "LEAF_MIN"
+  ph_deg0 <- x$lo_type == "LEAF_MIN"
   # extended persistent features
-  ph_ext <- ( ph_deg0 & cp$hi_type == "LEAF_MAX" ) |
-    ( ! ph_deg0 & cp$hi_type == "DOWNFORK" )
+  ph_ext <- ( ph_deg0 & x$hi_type == "LEAF_MAX" ) |
+    ( ! ph_deg0 & x$hi_type == "DOWNFORK" )
   # low- and high-value columns
-  lo_hi <- match(paste0(c("lo", "hi"), "_", value), names(cp))
+  lo_hi <- match(paste0(c("lo", "hi"), "_", value), names(x))
 
   # degree-0 features; ordinary part (increasing)
   ord_0 <- ph_deg0 & ( ! ph_ext )
-  ph_ord_0 <- cbind(cp[[lo_hi[1L]]][ord_0], cp[[lo_hi[2L]]][ord_0])
+  ph_ord_0 <- cbind(x[[lo_hi[1L]]][ord_0], x[[lo_hi[2L]]][ord_0])
   # degree-1 features; relative part (decreasing)
   rel_1 <- ( ! ph_deg0 ) & ( ! ph_ext )
-  ph_rel_1 <- cbind(cp[[lo_hi[2L]]][rel_1], cp[[lo_hi[1L]]][rel_1])
+  ph_rel_1 <- cbind(x[[lo_hi[2L]]][rel_1], x[[lo_hi[1L]]][rel_1])
   # degree-0 features; extended-positive part (increasing)
   ext_0 <- ph_deg0 & ph_ext
-  ph_ext_0 <- cbind(cp[[lo_hi[1L]]][ext_0], cp[[lo_hi[2L]]][ext_0])
+  ph_ext_0 <- cbind(x[[lo_hi[1L]]][ext_0], x[[lo_hi[2L]]][ext_0])
   # degree-1 features; extended-negative part (decreasing)
   ext_1 <- ( ! ph_deg0 ) & ph_ext
-  ph_ext_1 <- cbind(cp[[lo_hi[2L]]][ext_1], cp[[lo_hi[1L]]][ext_1])
+  ph_ext_1 <- cbind(x[[lo_hi[2L]]][ext_1], x[[lo_hi[1L]]][ext_1])
 
   # format as persistence data
   ph <- phutil::as_persistence(list(
@@ -79,12 +87,12 @@ reeb_graph_persistence <- function(
   ph$metadata$engine <- "rph::reeb_graph_pairs"
   ph$metadata$filtration <- paste0(
     "extended Reeb (",
-    if (sublevel) "sublevel" else "superlevel",
+    if (attr(x, "sublevel")) "sublevel" else "superlevel",
     ")"
   )
   # FIXME: Encode parameters so that they print with quotes.
   ph$metadata$parameters <- list(
-    method = attr(cp, "method"),
+    method = attr(x, "method"),
     value = value
   )
 

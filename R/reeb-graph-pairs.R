@@ -20,17 +20,39 @@
 #'   homology][reeb_graph_persistence], which is here reformulated following
 #'   Carrière & Oudot (2018).
 #'
+#'   The output S3 class is a light wrapper around a data frame containing the
+#'   types, values, indices, and orders of persistent pairs.
+#'
 #' @param x A [`reeb_graph`][reeb_graph] object.
-#' @param sublevel Logical; whether to take the sublevel set filtration (`TRUE`,
+#' @param sublevel Logical; whether to use the sublevel set filtration (`TRUE`,
 #'   the default) or else the superlevel set filtration (via reversing
 #'   `x$values` before paring critical points.
 #' @param method Character; the pairing method to use. Matched to
 #'   `"single_pass"` (the default) or `"multi_pass"`.
-#' @return A data frame containing eight output vectors returned by the Java
-#'   method: for the low- (`lo_`) and high- (`hi_`) valued nodes of each pair,
-#'   the `type`s (`character`), `value`s (`double`), `index`es (`integer`), and
-#'   `order`s (`integer`). The data frame has attributes `"method"` for the
-#'   method used and `"elapsedTime"` for the elapsed time.
+#' @return A data frame with subclass [reeb_graph_pairs] containing eight
+#'   vectors output by the Java method characterizing the low- and high-valued
+#'   critical points of each pair:
+#'   \describe{
+#'     \item{`lo_type`,`hi_type`}{
+#'       Character; the type of critical point,
+#'       one of `LEAF_MIN`, `LEAF_MAX`, `UPFORK`, and `DOWNFORK`.
+#'     }
+#'     \item{`lo_value`,`hi_value`}{
+#'       Double; the value (stored in `x$values`) of the critical point.
+#'     }
+#'     \item{`lo_index,hi_index`}{
+#'       Integer; the index (used in `x$edgelist`) of the critical point.
+#'       Regular points will not appear,
+#'       while degenerate critical points will appear multiple times.
+#'     }
+#'     \item{`lo_order,hi_order`}{
+#'       Integer; the order of the critical point in the pairing.
+#'       This is based on the conditioned Reeb graph constructed internally
+#'       so will not be duplicated.
+#'     }
+#'   }
+#'   The data frame also has attributes `"method"` for the method used and
+#'   `"elapsedTime"` for the elapsed time.
 #' @examples
 #' ex_sf <- system.file("extdata", "running_example.txt", package = "rgp")
 #' ( ex_rg <- read_reeb_graph(ex_sf) )
@@ -39,6 +61,14 @@
 #' attr(ex_cp, "elapsedTime")
 #'
 #' reeb_graph_pairs(ex_rg, sublevel = FALSE)
+#'
+#' x <- reeb_graph(
+#'   values = c(0, .4, .6, 1),
+#'   edgelist = c( 1,2, 1,3, 2,4, 3,4 )
+#' )
+#' ( mp <- reeb_graph_pairs(x) )
+#' class(mp)
+#' as.data.frame(mp)
 #'
 #' @template ref-reebgraphpairing
 #' @template ref-tu2019
@@ -49,8 +79,8 @@ reeb_graph_pairs <- function(
     sublevel = TRUE,
     method = c("single_pass", "multi_pass")
 ) {
-
   stopifnot(inherits(x, "reeb_graph"))
+
   # reverse value function
   if (! is.logical(sublevel) || is.na(sublevel))
     stop("`sublevel` must be `TRUE` or `FALSE`.")
@@ -118,9 +148,39 @@ reeb_graph_pairs <- function(
     lo_order = vValues,
     hi_order = pValues
   )
+  attr(res, "sublevel") <- sublevel
   attr(res, "method") <- method
   attr(res, "elapsedTime") <- elapsedTime
 
   class(res) <- c("reeb_graph_pairs", class(res))
   res
+}
+
+#' @export
+as.data.frame.reeb_graph_pairs <- function(x, ...) {
+  check_reeb_graph_pairs(x)
+  class(x) <- "data.frame"
+  x
+}
+
+check_reeb_graph_pairs <- function(x) {
+  stopifnot(
+    inherits(x, "data.frame"),
+    setequal(
+      names(x),
+      outer(
+        c("lo", "hi"),
+        c("type", "value", "index", "order"),
+        FUN = paste, sep = "_"
+      )
+    ),
+    is.numeric(x$lo_value), is.numeric(x$hi_value),
+    is.integer(x$lo_index), is.integer(x$hi_index),
+    is.numeric(x$lo_order), is.numeric(x$hi_order)
+  )
+  # check that types are comprehensible
+  stopifnot(
+    all(cp$lo_type == "LEAF_MIN" | cp$lo_type == "UPFORK"),
+    all(cp$hi_type == "LEAF_MAX" | cp$hi_type == "DOWNFORK")
+  )
 }
