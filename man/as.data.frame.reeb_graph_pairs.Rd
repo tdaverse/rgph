@@ -17,7 +17,7 @@ properties: value (height), index, and order.
 \examples{
 x <- reeb_graph(
   values = c(0, .4, .6, 1),
-  edgelist = rbind(c(0, 1), c(0, 2), c(1, 3), c(2, 3))
+  edgelist = c( 1,2, 1,3, 2,4, 3,4 )
 )
 mp <- reeb_graph_pairs(x)
 print(mp)

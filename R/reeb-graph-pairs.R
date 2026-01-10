@@ -120,6 +120,7 @@ reeb_graph_pairs <- function(
   )
   attr(res, "method") <- method
   attr(res, "elapsedTime") <- elapsedTime
+
   class(res) <- c("reeb_graph_pairs", class(res))
   res
 }

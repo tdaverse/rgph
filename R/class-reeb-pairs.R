@@ -9,10 +9,10 @@
 #' @examples
 #' x <- reeb_graph(
 #'   values = c(0, .4, .6, 1),
-#'   edgelist = rbind(c(0, 1), c(0, 2), c(1, 3), c(2, 3))
+#'   edgelist = c( 1,2, 1,3, 2,4, 3,4 )
 #' )
-#' mp <- reeb_graph_pairs(x)
-#' print(mp)
+#' ( mp <- reeb_graph_pairs(x) )
+#' class(mp)
 #' as.data.frame(mp)
 #' @export
 as.data.frame.reeb_graph_pairs <- function(x, ...) {
@@ -27,13 +27,13 @@ check_reeb_graph_pairs <- function(x) {
     setequal(
       names(x),
       outer(
-        c("birth", "death"),
-        c("value", "index", "order"),
+        c("lo", "hi"),
+        c("type", "value", "index", "order"),
         FUN = paste, sep = "_"
       )
     ),
-    is.numeric(x$birth_value), is.numeric(x$death_value),
-    is.integer(x$birth_index), is.integer(x$death_index),
-    is.numeric(x$birth_order), is.numeric(x$death_order)
+    is.numeric(x$lo_value), is.numeric(x$hi_value),
+    is.integer(x$lo_index), is.integer(x$hi_index),
+    is.numeric(x$lo_order), is.numeric(x$hi_order)
   )
 }
