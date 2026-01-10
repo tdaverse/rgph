@@ -40,12 +40,12 @@
 #'     \item{`lo_value`,`hi_value`}{
 #'       Double; the value (stored in `x$values`) of the critical point.
 #'     }
-#'     \item{`lo_index,hi_index`}{
+#'     \item{`lo_index`,`hi_index`}{
 #'       Integer; the index (used in `x$edgelist`) of the critical point.
 #'       Regular points will not appear,
 #'       while degenerate critical points will appear multiple times.
 #'     }
-#'     \item{`lo_order,hi_order`}{
+#'     \item{`lo_order`,`hi_order`}{
 #'       Integer; the order of the critical point in the pairing.
 #'       This is based on the conditioned Reeb graph constructed internally
 #'       so will not be duplicated.

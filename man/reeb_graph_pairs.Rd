@@ -28,12 +28,12 @@ one of \code{LEAF_MIN}, \code{LEAF_MAX}, \code{UPFORK}, and \code{DOWNFORK}.
 \item{\code{lo_value},\code{hi_value}}{
 Double; the value (stored in \code{x$values}) of the critical point.
 }
-\item{\verb{lo_index,hi_index}}{
+\item{\code{lo_index},\code{hi_index}}{
 Integer; the index (used in \code{x$edgelist}) of the critical point.
 Regular points will not appear,
 while degenerate critical points will appear multiple times.
 }
-\item{\verb{lo_order,hi_order}}{
+\item{\code{lo_order},\code{hi_order}}{
 Integer; the order of the critical point in the pairing.
 This is based on the conditioned Reeb graph constructed internally
 so will not be duplicated.
