@@ -26,27 +26,24 @@
 #' ( t10 <- read_reeb_graph(t10_f) )
 #' ( t10_ph <- reeb_graph_persistence(t10) )
 #' phutil::get_pairs(t10_ph, dimension = 0)
-#' phutil::get_pairs(t10_ph, dimension = 1)
 #' ( t10_ph <- reeb_graph_persistence(t10, value = "index") )
 #' phutil::get_pairs(t10_ph, dimension = 0)
-#' phutil::get_pairs(t10_ph, dimension = 1)
 #' ( t10_ph <- reeb_graph_persistence(t10, value = "order") )
 #' phutil::get_pairs(t10_ph, dimension = 0)
-#' phutil::get_pairs(t10_ph, dimension = 1)
 #'
 #' @export
 reeb_graph_persistence <- function(
     x,
+    sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
     value = c("value", "index", "order")
 ) {
 
   stopifnot(inherits(x, "reeb_graph"))
-  method <- match.arg(tolower(method), c("single_pass", "multi_pass"))
   value <- match.arg(tolower(value), c("value", "index", "order"))
 
   # pair critical points
-  cp <- reeb_graph_pairs(x, method = method)
+  cp <- reeb_graph_pairs(x, sublevel = sublevel, method = method)
   # check that types are comprehensible
   stopifnot(
     all(cp$lo_type == "LEAF_MIN" | cp$lo_type == "UPFORK"),
@@ -80,9 +77,16 @@ reeb_graph_persistence <- function(
     rbind(ph_rel_1, ph_ext_1)
   ))
   ph$metadata$engine <- "rph::reeb_graph_pairs"
-  ph$metadata$filtration <- "extended Reeb"
+  ph$metadata$filtration <- paste0(
+    "extended Reeb (",
+    if (sublevel) "sublevel" else "superlevel",
+    ")"
+  )
   # FIXME: Encode parameters so that they print with quotes.
-  ph$metadata$parameters <- list(method = method, value = value)
+  ph$metadata$parameters <- list(
+    method = attr(cp, "method"),
+    value = value
+  )
 
   ph
 }

@@ -6,12 +6,17 @@
 \usage{
 reeb_graph_persistence(
   x,
+  sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
   value = c("value", "index", "order")
 )
 }
 \arguments{
 \item{x}{A \code{\link{reeb_graph}} object.}
+
+\item{sublevel}{Logical; whether to take the sublevel set filtration (\code{TRUE},
+the default) or else the superlevel set filtration (via reversing
+\code{x$values} before paring critical points.}
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
@@ -46,12 +51,9 @@ t10_f <- system.file("extdata", "10_tree_iterations.txt", package = "rgp")
 ( t10 <- read_reeb_graph(t10_f) )
 ( t10_ph <- reeb_graph_persistence(t10) )
 phutil::get_pairs(t10_ph, dimension = 0)
-phutil::get_pairs(t10_ph, dimension = 1)
 ( t10_ph <- reeb_graph_persistence(t10, value = "index") )
 phutil::get_pairs(t10_ph, dimension = 0)
-phutil::get_pairs(t10_ph, dimension = 1)
 ( t10_ph <- reeb_graph_persistence(t10, value = "order") )
 phutil::get_pairs(t10_ph, dimension = 0)
-phutil::get_pairs(t10_ph, dimension = 1)
 
 }
