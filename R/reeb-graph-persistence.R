@@ -58,18 +58,18 @@ reeb_graph_persistence <- function(
   # low- and high-value columns
   lo_hi <- match(paste0(c("lo", "hi"), "_", value), names(cp))
 
-  # degree-0 features; ordinary part
+  # degree-0 features; ordinary part (increasing)
   ord_0 <- ph_deg0 & ( ! ph_ext )
   ph_ord_0 <- cbind(cp[[lo_hi[1L]]][ord_0], cp[[lo_hi[2L]]][ord_0])
-  # degree-1 features; relative part
+  # degree-1 features; relative part (decreasing)
   rel_1 <- ( ! ph_deg0 ) & ( ! ph_ext )
-  ph_rel_1 <- cbind(cp[[lo_hi[1L]]][rel_1], cp[[lo_hi[2L]]][rel_1])
-  # degree-0 features; extended-positive part
+  ph_rel_1 <- cbind(cp[[lo_hi[2L]]][rel_1], cp[[lo_hi[1L]]][rel_1])
+  # degree-0 features; extended-positive part (increasing)
   ext_0 <- ph_deg0 & ph_ext
   ph_ext_0 <- cbind(cp[[lo_hi[1L]]][ext_0], cp[[lo_hi[2L]]][ext_0])
-  # degree-1 features; extended-negative part
+  # degree-1 features; extended-negative part (decreasing)
   ext_1 <- ( ! ph_deg0 ) & ph_ext
-  ph_ext_1 <- cbind(cp[[lo_hi[1L]]][ext_1], cp[[lo_hi[2L]]][ext_1])
+  ph_ext_1 <- cbind(cp[[lo_hi[2L]]][ext_1], cp[[lo_hi[1L]]][ext_1])
 
   # format as persistence data
   ph <- phutil::as_persistence(list(
