@@ -15,13 +15,18 @@ expect_equal(
 )
 # persistent pairs
 ph <- reeb_graph_persistence(x, method = "single")
-ph_ <- do.call(rbind, ph$pairs)
-ph_ <- ph_[order(ph_[, 1]), ]
+ph_ <- lapply(ph$pairs, function(x) x[order(x[, 1]), ])
 expect_equal(
   ph_,
-  cbind(
-    # persistence diagram in birth order
-    c( 0,  1,  4,  7,  9, 11, 12, 14),
-    c(15,  2,  6, 10,  5,  3,  8, 13)
+  # persistence diagrams in birth order
+  list(
+    cbind(
+      c( 0,  1,  4,  7),
+      c(15,  2,  6, 10)
+    ),
+    cbind(
+      c( 9, 11, 12, 14),
+      c( 5,  3,  8, 13)
+    )
   )
 )
