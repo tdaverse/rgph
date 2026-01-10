@@ -1,4 +1,4 @@
-#' @title Compute Persistent Homology of a Reeb Graph
+#' @title Compute Extended Persistent Homology of a Reeb Graph
 #'
 #' @description This function obtains extended persistent homology of a Reeb
 #'   graph by way of pairing critical points.

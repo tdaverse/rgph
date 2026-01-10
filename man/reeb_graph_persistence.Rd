@@ -3,7 +3,7 @@
 \name{reeb_graph_persistence}
 \alias{reeb_graph_persistence}
 \alias{crit_pairs_to_persistence}
-\title{Compute Persistent Homology of a Reeb Graph}
+\title{Compute Extended Persistent Homology of a Reeb Graph}
 \usage{
 reeb_graph_persistence(
   x,
