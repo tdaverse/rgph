@@ -53,7 +53,7 @@ reeb_graph_persistence_graph <- function(
     values = NULL,
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
-    scale = c("value", "index", "order")
+    scale = c("value", "index", "order", "name")
 ) {
   x <- as_reeb_graph(x, values = values)
 
@@ -77,7 +77,7 @@ reeb_graph_persistence.reeb_graph <- function(
     x,
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
-    scale = c("value", "index", "order")
+    scale = c("value", "index", "order", "name")
 ) {
   # pair critical points
   cp <- reeb_graph_pairs(x, sublevel = sublevel, method = method)
@@ -90,9 +90,16 @@ reeb_graph_persistence.reeb_graph <- function(
 #' @export
 reeb_graph_persistence.reeb_graph_pairs <- function(
     x,
-    scale = c("value", "index", "order")
+    scale = c("value", "index", "order", "name")
 ) {
-  scale <- match.arg(tolower(scale), c("value", "index", "order"))
+  scale <- match.arg(tolower(scale), c("value", "index", "order", "name"))
+  if (scale == "name" && ! all(c("lo_name", "hi_name") %in% names(x))) {
+    warning(
+      "`reeb_graph_pairs` object has no '*_name' columns; ",
+      "using `scale = 'index'`."
+    )
+    scale <- "index"
+  }
 
   # degrees of persistent features
   ph_deg0 <- x$lo_type == "LEAF_MIN"

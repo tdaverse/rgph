@@ -49,7 +49,8 @@ the default) or else the superlevel set filtration (via reversing
 \value{
 A data frame with subclass \link{reeb_graph_pairs} containing eight
 vectors output by the Java method characterizing the low- and high-valued
-critical points of each pair:
+critical points of each pair, plus two additional vectors if nodes are
+named:
 \describe{
 \item{\code{lo_type},\code{hi_type}}{
 Character; the type of critical point,
@@ -67,6 +68,10 @@ while degenerate critical points will appear multiple times.
 Integer; the order of the critical point in the pairing.
 This is based on the conditioned Reeb graph constructed internally
 so will not be duplicated.
+}
+\item{\code{lo_name}, \code{hi_name}}{
+Character; the name of each \code{index} node.
+Included only if \code{names(x$values)} is not \code{NULL}.
 }
 }
 The data frame also has attributes \code{"method"} for the method used and
@@ -111,6 +116,10 @@ x <- reeb_graph(
 )
 ( mp <- reeb_graph_pairs(x) )
 class(mp)
+as.data.frame(mp)
+
+names(x$values) <- letters[seq_along(x$values)]
+( mp <- reeb_graph_pairs(x) )
 as.data.frame(mp)
 
 }

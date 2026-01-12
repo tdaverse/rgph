@@ -32,7 +32,8 @@
 #'   `"single_pass"` (the default) or `"multi_pass"`.
 #' @return A data frame with subclass [reeb_graph_pairs] containing eight
 #'   vectors output by the Java method characterizing the low- and high-valued
-#'   critical points of each pair:
+#'   critical points of each pair, plus two additional vectors if nodes are
+#'   named:
 #'   \describe{
 #'     \item{`lo_type`,`hi_type`}{
 #'       Character; the type of critical point,
@@ -50,6 +51,10 @@
 #'       Integer; the order of the critical point in the pairing.
 #'       This is based on the conditioned Reeb graph constructed internally
 #'       so will not be duplicated.
+#'     }
+#'     \item{`lo_name`, `hi_name`}{
+#'       Character; the name of each `index` node.
+#'       Included only if `names(x$values)` is not `NULL`.
 #'     }
 #'   }
 #'   The data frame also has attributes `"method"` for the method used and
@@ -69,6 +74,10 @@
 #' )
 #' ( mp <- reeb_graph_pairs(x) )
 #' class(mp)
+#' as.data.frame(mp)
+#'
+#' names(x$values) <- letters[seq_along(x$values)]
+#' ( mp <- reeb_graph_pairs(x) )
 #' as.data.frame(mp)
 #'
 #' @template ref-reebgraphpairing
@@ -183,6 +192,10 @@ reeb_graph_pairs.reeb_graph <- function(
     lo_order = vValues,
     hi_order = pValues
   )
+  if (! is.null(names(x$values))) {
+    res$lo_name <- names(x$values)[res$lo_index]
+    res$hi_name <- names(x$values)[res$hi_index]
+  }
   attr(res, "sublevel") <- sublevel
   attr(res, "method") <- method
   attr(res, "elapsedTime") <- elapsedTime
@@ -201,21 +214,25 @@ as.data.frame.reeb_graph_pairs <- function(x, ...) {
 check_reeb_graph_pairs <- function(x) {
   stopifnot(
     inherits(x, "data.frame"),
+    length(x) == 8L || length(x) == 10L,
     setequal(
       names(x),
       outer(
         c("lo", "hi"),
-        c("type", "value", "index", "order"),
+        c("type", "value", "index", "order", "name"),
         FUN = paste, sep = "_"
-      )
+      )[seq(length(x))]
     ),
     is.numeric(x$lo_value), is.numeric(x$hi_value),
     is.integer(x$lo_index), is.integer(x$hi_index),
-    is.numeric(x$lo_order), is.numeric(x$hi_order)
+    is.numeric(x$lo_order), is.numeric(x$hi_order),
+    # RHS is only evaluated if LHS is false
+    is.null(x$lo_name) || is.character(x$lo_name),
+    is.null(x$hi_name) || is.character(x$hi_name)
   )
   # check that types are comprehensible
   stopifnot(
-    all(cp$lo_type == "LEAF_MIN" | cp$lo_type == "UPFORK"),
-    all(cp$hi_type == "LEAF_MAX" | cp$hi_type == "DOWNFORK")
+    all(x$lo_type == "LEAF_MIN" | x$lo_type == "UPFORK"),
+    all(x$hi_type == "LEAF_MAX" | x$hi_type == "DOWNFORK")
   )
 }
