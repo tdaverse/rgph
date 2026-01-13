@@ -18,7 +18,7 @@ reeb_graph_persistence(x, ...)
   values = NULL,
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
-  scale = c("value", "index", "order", "name")
+  scale = c("value", "index", "order")
 )
 
 \method{reeb_graph_persistence}{network}(
@@ -26,17 +26,17 @@ reeb_graph_persistence(x, ...)
   values = NULL,
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
-  scale = c("value", "index", "order", "name")
+  scale = c("value", "index", "order")
 )
 
 \method{reeb_graph_persistence}{reeb_graph}(
   x,
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
-  scale = c("value", "index", "order", "name")
+  scale = c("value", "index", "order")
 )
 
-\method{reeb_graph_persistence}{reeb_graph_pairs}(x, scale = c("value", "index", "order", "name"))
+\method{reeb_graph_persistence}{reeb_graph_pairs}(x, scale = c("value", "index", "order"))
 }
 \arguments{
 \item{x}{A \code{\link{reeb_graph}} or
