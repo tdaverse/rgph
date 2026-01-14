@@ -50,7 +50,7 @@ read_reeb_graph(file)
 \value{
 An object of class \code{"reeb_graph"}, which is a list of two elements:
 \itemize{
-\item \code{values}: Numeric vector of function values at vertices.
+\item \code{values}: Numeric vector of function values at vertices, optionally named.
 \item \code{edgelist}: 2-column integer matrix of linked vertex pairs.
 }
 }
@@ -62,10 +62,13 @@ structure to represent Reeb graphs in R.
 Vertex indices start at zero, for consistency with examples. The
 positions of \code{values} and the integer values in \code{edgelist} will correspond
 to the same vertices; \code{length(values)} must bound \code{max(edgelist)}.
+
+The S3 class is a list of \code{"values"} and \code{"edgelist"}. The \code{\link[=print]{print()}} method
+prints one edge per line, with nodes formatted as "\code{index[name] (value)}"
 }
 \examples{
 x <- reeb_graph(
-  values = c(0, .4, .6, 1),
+  values = c(a = 0, b = .4, c = .6, d = 1),
   edgelist = rbind( c(1,2), c(1,3), c(2,4), c(3,4))
 )
 print(x)

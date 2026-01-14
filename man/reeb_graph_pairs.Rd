@@ -41,7 +41,7 @@ which to store the Reeb graph value function.}
 
 \item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
 the default) or else the superlevel set filtration (via reversing
-\code{x$values} before paring critical points.}
+\code{x[["values"]]} before paring critical points.}
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
@@ -55,10 +55,10 @@ Character; the type of critical point,
 one of \code{LEAF_MIN}, \code{LEAF_MAX}, \code{UPFORK}, and \code{DOWNFORK}.
 }
 \item{\code{value}}{
-Double; the value (stored in \code{x$values}) of the critical point.
+Double; the value (stored in \code{x[["values"]]}) of the critical point.
 }
 \item{\code{index}}{
-Integer; the index (used in \code{x$edgelist}) of the critical point.
+Integer; the index (used in \code{x[["edgelist"]]}) of the critical point.
 Regular points will not appear,
 while degenerate critical points will appear multiple times.
 }
@@ -89,7 +89,9 @@ the sublevel filtration and others along the superlevel filtration (Tu &al,
 
 The output S3 class is a list of 2-column matrices containing the types,
 values, indices, and orders of persistent pairs, with attributes containing
-the node names and metadata.
+the node names and metadata. The \code{\link[=print]{print()}} method visually expresses each
+pair, increasing from left to right, with nodes formatted as with
+\link{reeb_graph}.
 
 The names of the coerced data frame use \code{lo_} and \code{hi_} prefixes, in
 contrast to the Java source code that uses \code{birth_} and \code{death_}. This is

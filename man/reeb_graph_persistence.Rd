@@ -53,7 +53,7 @@ which to store the Reeb graph value function.}
 
 \item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
 the default) or else the superlevel set filtration (via reversing
-\code{x$values} before paring critical points.}
+\code{x[["values"]]} before paring critical points.}
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}

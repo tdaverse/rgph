@@ -7,6 +7,9 @@
 #'   positions of `values` and the integer values in `edgelist` will correspond
 #'   to the same vertices; `length(values)` must bound `max(edgelist)`.
 #'
+#'   The S3 class is a list of `"values"` and `"edgelist"`. The [print()] method
+#'   prints one edge per line, with nodes formatted as "`index[name] (value)`"
+#'
 #' @param values Numeric vector of function values at vertices.
 #' @param edgelist 2-column integer matrix of linked vertex pairs.
 #' @param x Object of class `"reeb_graph"`.
@@ -16,11 +19,11 @@
 #'   `ReebGraphPairing`.
 #' @returns An object of class `"reeb_graph"`, which is a list of two elements:
 #'
-#' - `values`: Numeric vector of function values at vertices.
+#' - `values`: Numeric vector of function values at vertices, optionally named.
 #' - `edgelist`: 2-column integer matrix of linked vertex pairs.
 #' @examples
 #' x <- reeb_graph(
-#'   values = c(0, .4, .6, 1),
+#'   values = c(a = 0, b = .4, c = .6, d = 1),
 #'   edgelist = rbind( c(1,2), c(1,3), c(2,4), c(3,4))
 #' )
 #' print(x)
@@ -70,27 +73,38 @@ print.reeb_graph <- function(x, ..., n = NULL) {
 #' @rdname reeb_graph
 #' @export
 format.reeb_graph <- function(x, ..., n = NULL) {
-  vcount <- length(x$values)
-  frange <- range(x$values)
-  ecount <- nrow(x$edgelist)
+  vcount <- length(x[["values"]])
+  frange <- range(x[["values"]])
+  ecount <- nrow(x[["edgelist"]])
+  vnames <- ! is.null(names(x[["values"]]))
 
-  if (is.null(n)) n <- min(nrow(x$edgelist), 6L)
-  fpairs <- matrix(
+  if (is.null(n)) n <- min(ecount, 12L)
+
+  edge_ind <- format(as.vector(x[["edgelist"]][seq(n), ]))
+  edge_val <- format(x[["values"]][as.vector(x[["edgelist"]][seq(n), ])])
+  if (vnames) {
+    edge_nam <- names(x[["values"]][as.vector(x[["edgelist"]][seq(n), ])])
+    edge_nam <- abbreviate(edge_nam, strict = TRUE, named = FALSE)
+    edge_nam <- format(edge_nam, width = max(nchar(edge_nam)), justify = "left")
+  }
+
+  edge_fmt <- matrix(
     paste0(
-      as.vector(x$edgelist[seq(n), ]),
-      " [", x$values[as.vector(x$edgelist[seq(n), ])], "]"
+      edge_ind,
+      if (vnames) paste0("[", edge_nam, "]"),
+      " (", edge_val, ")"
     ),
     nrow = n, ncol = 2L
   )
-  fout <- apply(fpairs, 1L, function(r) paste(r, collapse = " -- "))
+  edge_fmt <- apply(edge_fmt, 1L, function(r) paste(r, collapse = " -- "))
 
   cat(paste(
     paste0(
       "Reeb graph with ", vcount, " vertices and ", ecount, " edges ",
-      "taking values in [", frange[1L], ",", frange[2L], "]:"
+      "on [", frange[1L], ",", frange[2L], "]:"
     ),
-    paste(fout, collapse = "\n"),
-    if (n <  nrow(x$edgelist)) "...",
+    paste(edge_fmt, collapse = "\n"),
+    if (n <  nrow(x[["edgelist"]])) "...",
     sep = "\n"
   ))
 }
