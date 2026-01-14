@@ -33,6 +33,7 @@
 #'   `x[["values"]]` before paring critical points.
 #' @param method Character; the pairing method to use. Matched to
 #'   `"single_pass"` (the default) or `"multi_pass"`.
+#' @param n Integer number of critical pairs to print.
 #' @return A list of subclass [reeb_graph_pairs] containing 4 2-column matrices
 #'   characterizing the low- and high-valued critical points of each pair:
 #'   \describe{
@@ -84,6 +85,7 @@
 #' @export
 reeb_graph_pairs <- function(x, ...) UseMethod("reeb_graph_pairs")
 
+#' @rdname reeb_graph_pairs
 #' @export
 reeb_graph_pairs.default <- function(x, ...) {
   stop(paste0(
@@ -97,7 +99,8 @@ reeb_graph_pairs_graph <- function(
     x,
     values = NULL,
     sublevel = TRUE,
-    method = c("single_pass", "multi_pass")
+    method = c("single_pass", "multi_pass"),
+    ...
 ) {
   x <- as_reeb_graph(x, values = values)
 
@@ -107,17 +110,21 @@ reeb_graph_pairs_graph <- function(
   )
 }
 
+#' @rdname reeb_graph_pairs
 #' @export
 reeb_graph_pairs.igraph <- reeb_graph_pairs_graph
 
+#' @rdname reeb_graph_pairs
 #' @export
 reeb_graph_pairs.network <- reeb_graph_pairs_graph
 
+#' @rdname reeb_graph_pairs
 #' @export
 reeb_graph_pairs.reeb_graph <- function(
     x,
     sublevel = TRUE,
-    method = c("single_pass", "multi_pass")
+    method = c("single_pass", "multi_pass"),
+    ...
 ) {
   # reverse value function for superlevel set persistence
   if (! is.logical(sublevel) || is.na(sublevel))
@@ -192,6 +199,7 @@ reeb_graph_pairs.reeb_graph <- function(
   res
 }
 
+#' @rdname reeb_graph_pairs
 #' @export
 as.data.frame.reeb_graph_pairs <- function(x, ...) {
   check_reeb_graph_pairs(x)
@@ -228,13 +236,13 @@ check_reeb_graph_pairs <- function(x) {
   )
 }
 
-# TODO: Write a `format()` and/or `print()` method for `reeb_graph_pairs`.
-
+#' @rdname reeb_graph_pairs
 #' @export
 print.reeb_graph_pairs <- function(x, ..., n = NULL) {
   cat(format(x, ..., n = n), sep = "\n")
 }
 
+#' @rdname reeb_graph_pairs
 #' @export
 format.reeb_graph_pairs <- function(x, ..., n = NULL) {
   # summary info
@@ -245,11 +253,6 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL) {
   if (is.null(n)) n <- min(npairs, 12L)
 
   # vertical components
-  # type_abbr <- c(
-  #   LEAF_MIN = "MIN", LEAF_MAX = "MAX",
-  #   UPFORK   = "U-F", DOWNFORK = "D-F"
-  # )
-  # pair_abb <- matrix(type_abbr[x[["type"]]], ncol = 2L)
   pair_val <- apply(x[["value"]], 2L, format)
   pair_ind <- apply(x[["index"]], 2L, format)
   if (vnames) {

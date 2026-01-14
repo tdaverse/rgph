@@ -2,9 +2,15 @@
 % Please edit documentation in R/class-reeb-graph.R
 \name{reeb_graph}
 \alias{reeb_graph}
+\alias{format.reeb_graph}
+\alias{read_reeb_graph}
 \title{An S3 class and constructors for Reeb graphs}
 \usage{
 reeb_graph(values, edgelist)
+
+\method{format}{reeb_graph}(x, ..., n = NULL)
+
+read_reeb_graph(file)
 }
 \arguments{
 \item{values}{Numeric vector of function values at vertices.}

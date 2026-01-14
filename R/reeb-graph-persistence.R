@@ -11,6 +11,7 @@
 #'   This function may be deprecated once a `reeb_graph_pairs` method is
 #'   written for [phutil::as_persistence()].
 #'
+#' @importFrom phutil as_persistence
 #' @param x A [`reeb_graph`][reeb_graph] or
 #'   [`reeb_graph_pairs`][reeb_graph_pairs] object, or an object that can be
 #'   [coerced to class "reeb_graph"][as_reeb_graph].
@@ -39,6 +40,7 @@
 #' @export
 reeb_graph_persistence <- function(x, ...) UseMethod("reeb_graph_persistence")
 
+#' @rdname reeb_graph_persistence
 #' @export
 reeb_graph_persistence.default <- function(x, ...) {
   stop(paste0(
@@ -53,7 +55,8 @@ reeb_graph_persistence_graph <- function(
     values = NULL,
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
-    scale = c("value", "index", "order")
+    scale = c("value", "index", "order"),
+    ...
 ) {
   x <- as_reeb_graph(x, values = values)
 
@@ -63,18 +66,22 @@ reeb_graph_persistence_graph <- function(
   )
 }
 
+#' @rdname reeb_graph_persistence
 #' @export
 reeb_graph_persistence.igraph <- reeb_graph_persistence_graph
 
+#' @rdname reeb_graph_persistence
 #' @export
 reeb_graph_persistence.network <- reeb_graph_persistence_graph
 
+#' @rdname reeb_graph_persistence
 #' @export
 reeb_graph_persistence.reeb_graph <- function(
     x,
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
-    scale = c("value", "index", "order")
+    scale = c("value", "index", "order"),
+    ...
 ) {
   # pair critical points
   cp <- reeb_graph_pairs(x, sublevel = sublevel, method = method)
@@ -83,10 +90,12 @@ reeb_graph_persistence.reeb_graph <- function(
   reeb_graph_persistence.reeb_graph_pairs(cp, scale = scale)
 }
 
+#' @rdname reeb_graph_persistence
 #' @export
 reeb_graph_persistence.reeb_graph_pairs <- function(
     x,
-    scale = c("value", "index", "order")
+    scale = c("value", "index", "order"),
+    ...
 ) {
   scale <- match.arg(tolower(scale), c("value", "index", "order"))
 
@@ -110,7 +119,7 @@ reeb_graph_persistence.reeb_graph_pairs <- function(
   ph_ext_1 <- unname(cbind(x[[scale]][ext_1, 2L], x[[scale]][ext_1, 1L]))
 
   # format as persistence data
-  ph <- phutil::as_persistence(
+  ph <- as_persistence(
     list(
       rbind(ph_ord_0, ph_ext_0),
       rbind(ph_rel_1, ph_ext_1)

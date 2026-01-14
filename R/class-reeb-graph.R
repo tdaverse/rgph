@@ -70,6 +70,7 @@ print.reeb_graph <- function(x, ..., n = NULL) {
   cat(format(x, ..., n = n), sep = "\n")
 }
 
+#' @rdname reeb_graph
 #' @export
 format.reeb_graph <- function(x, ..., n = NULL) {
   vcount <- length(x[["values"]])
@@ -108,6 +109,7 @@ format.reeb_graph <- function(x, ..., n = NULL) {
   ))
 }
 
+#' @rdname reeb_graph
 #' @export
 read_reeb_graph <- function(file) {
   lines <- readLines(file)

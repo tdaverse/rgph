@@ -2,14 +2,58 @@
 % Please edit documentation in R/reeb-graph-pairs.R
 \name{reeb_graph_pairs}
 \alias{reeb_graph_pairs}
+\alias{reeb_graph_pairs.default}
+\alias{reeb_graph_pairs.igraph}
+\alias{reeb_graph_pairs.network}
+\alias{reeb_graph_pairs.reeb_graph}
+\alias{as.data.frame.reeb_graph_pairs}
+\alias{print.reeb_graph_pairs}
+\alias{format.reeb_graph_pairs}
 \title{Pair Reeb Graph Critical Points via Java}
 \usage{
 reeb_graph_pairs(x, ...)
+
+\method{reeb_graph_pairs}{default}(x, ...)
+
+\method{reeb_graph_pairs}{igraph}(
+  x,
+  values = NULL,
+  sublevel = TRUE,
+  method = c("single_pass", "multi_pass"),
+  ...
+)
+
+\method{reeb_graph_pairs}{network}(
+  x,
+  values = NULL,
+  sublevel = TRUE,
+  method = c("single_pass", "multi_pass"),
+  ...
+)
+
+\method{reeb_graph_pairs}{reeb_graph}(
+  x,
+  sublevel = TRUE,
+  method = c("single_pass", "multi_pass"),
+  ...
+)
+
+\method{as.data.frame}{reeb_graph_pairs}(x, ...)
+
+\method{print}{reeb_graph_pairs}(x, ..., n = NULL)
+
+\method{format}{reeb_graph_pairs}(x, ..., n = NULL)
 }
 \arguments{
 \item{x}{A \code{\link{reeb_graph}} object.}
 
 \item{...}{Additional arguments passed to methods.}
+
+\item{values}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
+node attribute to use as the Reeb graph value function. If \code{NULL} (the
+default), the first numeric node attribute is used. For coercion \emph{from}
+class \code{reeb_graph}, a character value; the name of the node attribute in
+which to store the Reeb graph value function.}
 
 \item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
 the default) or else the superlevel set filtration (via reversing
@@ -17,6 +61,8 @@ the default) or else the superlevel set filtration (via reversing
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
+
+\item{n}{Integer number of critical pairs to print.}
 }
 \value{
 A list of subclass \link{reeb_graph_pairs} containing 4 2-column matrices

@@ -40,9 +40,9 @@ Description: Interface
 Depends:
     R (>= 2.7.0),
     rJava (>= 0.5-0),
-    rlang,
     phutil
 Suggests:
+    rlang,
     tinytest,
     igraph,
     network

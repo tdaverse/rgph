@@ -1,5 +1,10 @@
+# R project
 ^.*\.Rproj$
 ^\.Rproj\.user$
+
+# package
+java/.idea
+man-roxygen
 
 # custom
 sandbox

@@ -46,6 +46,7 @@
 #' @export
 as_reeb_graph <- function(x, ...) UseMethod("as_reeb_graph")
 
+#' @rdname as_reeb_graph
 #' @export
 as_reeb_graph.igraph <- function(x, values = NULL, names = NULL, ...) {
   if (is.null(values)) {
@@ -75,6 +76,7 @@ as_reeb_graph.igraph <- function(x, values = NULL, names = NULL, ...) {
   r <- reeb_graph(values, igraph::as_edgelist(x, names = FALSE))
 }
 
+#' @rdname as_reeb_graph
 #' @export
 as_reeb_graph.network <- function(x, values = NULL, names = NULL, ...) {
   if (network::is.bipartite(x))
@@ -106,9 +108,11 @@ as_reeb_graph.network <- function(x, values = NULL, names = NULL, ...) {
   reeb_graph(values, as.matrix(x, matrix.type = "edgelist"))
 }
 
+#' @rdname as_reeb_graph
 #' @export
 as_igraph <- function(x, ...) UseMethod("as_igraph")
 
+#' @rdname as_reeb_graph
 #' @export
 as_igraph.reeb_graph <- function(x, values = "value", names = "name", ...) {
   g <- igraph::graph_from_edgelist(x$edgelist)
@@ -118,9 +122,11 @@ as_igraph.reeb_graph <- function(x, values = "value", names = "name", ...) {
   g
 }
 
+#' @rdname as_reeb_graph
 #' @export
 as_network <- function(x, ...) UseMethod("as_network")
 
+#' @rdname as_reeb_graph
 #' @export
 as_network.reeb_graph <- function(
     x, values = "value", names = "vertex.names", ...

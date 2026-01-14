@@ -2,25 +2,43 @@
 % Please edit documentation in R/as-reeb-graph.R
 \name{as_reeb_graph}
 \alias{as_reeb_graph}
+\alias{as_reeb_graph.igraph}
+\alias{as_reeb_graph.network}
+\alias{as_igraph}
+\alias{as_igraph.reeb_graph}
+\alias{as_network}
+\alias{as_network.reeb_graph}
 \title{Coerce objects to class \code{reeb_graph}}
 \usage{
 as_reeb_graph(x, ...)
+
+\method{as_reeb_graph}{igraph}(x, values = NULL, names = NULL, ...)
+
+\method{as_reeb_graph}{network}(x, values = NULL, names = NULL, ...)
+
+as_igraph(x, ...)
+
+\method{as_igraph}{reeb_graph}(x, values = "value", names = "name", ...)
+
+as_network(x, ...)
+
+\method{as_network}{reeb_graph}(x, values = "value", names = "vertex.names", ...)
 }
 \arguments{
 \item{x}{An R object to be coerced. See Details.}
 
 \item{...}{Additional arguments passed to methods.}
 
-\item{names}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
-node attribute to use as the Reeb graph node names. If \code{NULL}, names are
-omitted. For coercion \emph{from} class \code{reeb_graph}, a character value; the
-name of the node attribute in which to store the Reeb graph node names.}
-
 \item{values}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
 node attribute to use as the Reeb graph value function. If \code{NULL} (the
 default), the first numeric node attribute is used. For coercion \emph{from}
 class \code{reeb_graph}, a character value; the name of the node attribute in
 which to store the Reeb graph value function.}
+
+\item{names}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
+node attribute to use as the Reeb graph node names. If \code{NULL}, names are
+omitted. For coercion \emph{from} class \code{reeb_graph}, a character value; the
+name of the node attribute in which to store the Reeb graph node names.}
 }
 \value{
 A \link{reeb_graph} object.
