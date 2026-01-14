@@ -34,6 +34,8 @@
 #' @param method Character; the pairing method to use. Matched to
 #'   `"single_pass"` (the default) or `"multi_pass"`.
 #' @param n Integer number of critical pairs to print.
+#' @param minlength Minimum name abbreviation length; passed to
+#'   [base::abbreviate()].
 #' @return A list of subclass [reeb_graph_pairs] containing 4 2-column matrices
 #'   characterizing the low- and high-valued critical points of each pair:
 #'   \describe{
@@ -79,6 +81,17 @@
 #' ( mp <- reeb_graph_pairs(x) )
 #' as.data.frame(mp)
 #'
+#' @examplesIf rlang::is_installed("network")
+#' library(network)
+#' data("emon")
+#' mtsi <- emon$Cheyenne
+#' mtsi_reeb <- as_reeb_graph(
+#'   mtsi,
+#'   values = "Command.Rank.Score",
+#'   names = "vertex.names"
+#' )
+#' mtsi_cp <- reeb_graph_pairs(mtsi_reeb, sublevel = FALSE)
+#' print(mtsi_cp, minlength = 20)
 #' @template ref-reebgraphpairing
 #' @template ref-tu2019
 #' @template ref-carriere2018
@@ -238,26 +251,31 @@ check_reeb_graph_pairs <- function(x) {
 
 #' @rdname reeb_graph_pairs
 #' @export
-print.reeb_graph_pairs <- function(x, ..., n = NULL) {
-  cat(format(x, ..., n = n), sep = "\n")
+print.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
+  cat(format(x, ..., n = n, minlength = minlength), sep = "\n")
 }
 
 #' @rdname reeb_graph_pairs
 #' @export
-format.reeb_graph_pairs <- function(x, ..., n = NULL) {
+format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
   # summary info
   npairs <- nrow(x[["index"]])
   vnames <- ! is.null(attr(x, "vertex_names"))
 
   # formatting decisions
   if (is.null(n)) n <- min(npairs, 12L)
+  if (vnames) minlength <- min(minlength, min(attr(x, "vertex_names")))
 
   # vertical components
-  pair_val <- apply(x[["value"]], 2L, format)
-  pair_ind <- apply(x[["index"]], 2L, format)
+  pair_val <- apply(x[["value"]][seq(n), ], 2L, format)
+  pair_ind <- apply(x[["index"]][seq(n), ], 2L, format)
   if (vnames) {
-    pair_nam <- matrix(attr(x, "vertex_names")[x[["index"]]], ncol = 2L)
-    pair_nam <- abbreviate(pair_nam, strict = TRUE, named = FALSE)
+    pair_nam <-
+      matrix(attr(x, "vertex_names")[x[["index"]][seq(n), ]], ncol = 2L)
+    pair_nam <- abbreviate(
+      pair_nam, minlength = minlength,
+      strict = TRUE, named = FALSE
+    )
     pair_nam <- format(pair_nam, width = max(nchar(pair_nam)), justify = "left")
   }
 
@@ -266,7 +284,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL) {
     # high type
     c(
       LEAF_MIN = "", UPFORK = "", LEAF_MAX = "-- ", DOWNFORK = ">- "
-    )[x[["type"]]],
+    )[x[["type"]][seq(n), ]],
     # node info
     pair_ind,
     if (vnames) paste0("[", pair_nam, "]"),
@@ -274,7 +292,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL) {
     # low type
     c(
       LEAF_MIN = " --", UPFORK = " -<", LEAF_MAX = "", DOWNFORK = ""
-    )[x[["type"]]]
+    )[x[["type"]][seq(n), ]]
   ), ncol = 2L)
   pair_fmt <- apply(pair_fmt, 1L, paste, collapse = " ... ")
 

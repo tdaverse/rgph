@@ -15,6 +15,8 @@
 #' @param x Object of class `reeb_graph`.
 #' @param ... Additional arguments passed to [base::format()].
 #' @param n Integer number of edges to print.
+#' @param minlength Minimum name abbreviation length; passed to
+#'   [base::abbreviate()].
 #' @param file A plain text file containing Reeb graph data formatted as at
 #'   `ReebGraphPairing`.
 #' @returns An object of class `"reeb_graph"`, which is a list of two elements:
@@ -66,25 +68,29 @@ check_reeb_data <- function(values, edgelist) {
 }
 
 #' @export
-print.reeb_graph <- function(x, ..., n = NULL) {
-  cat(format(x, ..., n = n), sep = "\n")
+print.reeb_graph <- function(x, ..., n = NULL, minlength = 12L) {
+  cat(format(x, ..., n = n, minlength = minlength), sep = "\n")
 }
 
 #' @rdname reeb_graph
 #' @export
-format.reeb_graph <- function(x, ..., n = NULL) {
+format.reeb_graph <- function(x, ..., n = NULL, minlength = 12L) {
   vcount <- length(x[["values"]])
   frange <- range(x[["values"]])
   ecount <- nrow(x[["edgelist"]])
   vnames <- ! is.null(names(x[["values"]]))
 
   if (is.null(n)) n <- min(ecount, 12L)
+  if (vnames) minlength <- min(minlength, min(names(x[["values"]])))
 
   edge_ind <- format(as.vector(x[["edgelist"]][seq(n), ]))
   edge_val <- format(x[["values"]][as.vector(x[["edgelist"]][seq(n), ])])
   if (vnames) {
     edge_nam <- names(x[["values"]][as.vector(x[["edgelist"]][seq(n), ])])
-    edge_nam <- abbreviate(edge_nam, strict = TRUE, named = FALSE)
+    edge_nam <- abbreviate(
+      edge_nam, minlength = minlength,
+      strict = TRUE, named = FALSE
+    )
     edge_nam <- format(edge_nam, width = max(nchar(edge_nam)), justify = "left")
   }
 

@@ -40,9 +40,9 @@ reeb_graph_pairs(x, ...)
 
 \method{as.data.frame}{reeb_graph_pairs}(x, ...)
 
-\method{print}{reeb_graph_pairs}(x, ..., n = NULL)
+\method{print}{reeb_graph_pairs}(x, ..., n = NULL, minlength = 12L)
 
-\method{format}{reeb_graph_pairs}(x, ..., n = NULL)
+\method{format}{reeb_graph_pairs}(x, ..., n = NULL, minlength = 12L)
 }
 \arguments{
 \item{x}{A \code{\link{reeb_graph}} object.}
@@ -63,6 +63,9 @@ the default) or else the superlevel set filtration (via reversing
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
 
 \item{n}{Integer number of critical pairs to print.}
+
+\item{minlength}{Minimum name abbreviation length; passed to
+\code{\link[base:abbreviate]{base::abbreviate()}}.}
 }
 \value{
 A list of subclass \link{reeb_graph_pairs} containing 4 2-column matrices
@@ -137,6 +140,18 @@ names(x$values) <- letters[seq_along(x$values)]
 ( mp <- reeb_graph_pairs(x) )
 as.data.frame(mp)
 
+\dontshow{if (rlang::is_installed("network")) withAutoprint(\{ # examplesIf}
+library(network)
+data("emon")
+mtsi <- emon$Cheyenne
+mtsi_reeb <- as_reeb_graph(
+  mtsi,
+  values = "Command.Rank.Score",
+  names = "vertex.names"
+)
+mtsi_cp <- reeb_graph_pairs(mtsi_reeb, sublevel = FALSE)
+print(mtsi_cp, minlength = 20)
+\dontshow{\}) # examplesIf}
 }
 \references{
 \url{https://github.com/USFDataVisualization/ReebGraphPairing/}

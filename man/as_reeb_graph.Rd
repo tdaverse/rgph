@@ -68,13 +68,12 @@ plot(g, layout = l_rg)
 library(network)
 data("emon")
 mtsi <- emon$Cheyenne
-mtsi_reeb <- as_reeb_graph(mtsi, values = "Command.Rank.Score")
-mtsi_cp <- reeb_graph_pairs(mtsi_reeb, sublevel = FALSE)
-mtsi_names <- get.vertex.attribute(mtsi, "vertex.names")
-head(data.frame(
-  lower_org = mtsi_names[mtsi_cp[, "birth_index"]],
-  upper_org = mtsi_names[mtsi_cp[, "death_index"]]
-))
+mtsi_reeb <- as_reeb_graph(
+  mtsi,
+  values = "Command.Rank.Score",
+  names = "vertex.names"
+)
+print(mtsi_reeb, minlength = 24)
 \dontshow{\}) # examplesIf}
 }
 \seealso{

@@ -8,7 +8,7 @@
 \usage{
 reeb_graph(values, edgelist)
 
-\method{format}{reeb_graph}(x, ..., n = NULL)
+\method{format}{reeb_graph}(x, ..., n = NULL, minlength = 12L)
 
 read_reeb_graph(file)
 }
@@ -22,6 +22,9 @@ read_reeb_graph(file)
 \item{...}{Additional arguments passed to \code{\link[base:format]{base::format()}}.}
 
 \item{n}{Integer number of edges to print.}
+
+\item{minlength}{Minimum name abbreviation length; passed to
+\code{\link[base:abbreviate]{base::abbreviate()}}.}
 
 \item{file}{A plain text file containing Reeb graph data formatted as at
 \code{ReebGraphPairing}.}
