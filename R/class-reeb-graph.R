@@ -67,6 +67,7 @@ check_reeb_data <- function(values, edgelist) {
   )
 }
 
+#' @rdname reeb_graph
 #' @export
 print.reeb_graph <- function(x, ..., n = NULL, minlength = 12L) {
   cat(format(x, ..., n = n, minlength = minlength), sep = "\n")
