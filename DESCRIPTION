@@ -46,7 +46,7 @@ Suggests:
     tinytest,
     igraph,
     network
-SystemRequirements: Java (>= 1.5)
+SystemRequirements: Java (>= 5.0)
 License: GPL-3
 Packaged: 2014-09-04 13:17:36 UTC; tverbeke
 Repository: CRAN
