@@ -9,12 +9,12 @@
 Interface to the `ReebGraphPairing` Java program \doi{10.1007/978-3-030-33720-9_8} via the rJava package.
 }
 \author{
-\strong{Maintainer}: Satyajit Mohanty \email{mohantysatyajit57@gmail.com}
+\strong{Maintainer}: Jason Cory Brunson \email{cornelioid@gmail.com} (\href{https://orcid.org/0000-0003-3126-9494}{ORCID})
 
 Authors:
 \itemize{
+  \item Satyajit Mohanty \email{mohantysatyajit57@gmail.com}
   \item Shubham Singh \email{shubhamus16091998@example.com}
-  \item Jason Cory Brunson \email{cornelioid@gmail.com} (\href{https://orcid.org/0000-0003-3126-9494}{ORCID})
 }
 
 Other contributors:
