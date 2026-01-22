@@ -58,7 +58,7 @@ x <- reeb_graph(
 )
 print(x)
 
-t10 <- system.file("extdata", "10_tree_iterations.txt", package = "rgp")
+t10 <- system.file("extdata", "10_tree_iterations.txt", package = "rgph")
 ( y <- read_reeb_graph(t10) )
 
 reeb_graph_pairs(x, method = "multi_pass")

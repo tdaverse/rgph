@@ -3,7 +3,7 @@
 # check for agreement on a non-trivial example
 
 # read from file
-f <- system.file("extdata", "10_tree_iterations.txt", package = "rgp")
+f <- system.file("extdata", "10_tree_iterations.txt", package = "rgph")
 rg1 <- read_reeb_graph(f)
 # define within R session
 vertex_values <- c(

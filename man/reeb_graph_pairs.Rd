@@ -120,7 +120,7 @@ meant to distinguish the pairs and their metadata from \link[=reeb_graph_persist
 Carrière & Oudot (2018).
 }
 \examples{
-ex_sf <- system.file("extdata", "running_example.txt", package = "rgp")
+ex_sf <- system.file("extdata", "running_example.txt", package = "rgph")
 ( ex_rg <- read_reeb_graph(ex_sf) )
 ( ex_cp <- reeb_graph_pairs(ex_rg) )
 attr(ex_cp, "method")

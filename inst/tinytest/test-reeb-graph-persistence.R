@@ -1,6 +1,6 @@
 # check that both methods return the correct pairs on the running example
 
-f <- system.file("extdata", "running_example.txt", package = "rgp")
+f <- system.file("extdata", "running_example.txt", package = "rgph")
 x <- read_reeb_graph(f)
 # critical point pairs
 p <- reeb_graph_pairs(x, method = "single")

@@ -1,7 +1,7 @@
 # check that persistence handles objects of other classes
 # (note that the example Reeb graph includes a multiedge)
 
-f <- system.file("extdata", "running_example.txt", package = "rgp")
+f <- system.file("extdata", "running_example.txt", package = "rgph")
 x <- read_reeb_graph(f)
 x_ph <- reeb_graph_persistence(x)
 

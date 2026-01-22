@@ -1,6 +1,6 @@
-Package: rgp
+Package: rgph
 Type: Package
-Title: Compute Extended Persistent Homology of Reeb Graphs
+Title: Pair Critical Points and Compute Persistent Homology of Reeb Graphs
 Version: 0.1.0
 Authors@R: c(
     person(

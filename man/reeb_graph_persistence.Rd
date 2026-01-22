@@ -81,13 +81,13 @@ This function may be deprecated once a \code{reeb_graph_pairs} method is
 written for \code{\link[phutil:persistence]{phutil::as_persistence()}}.
 }
 \examples{
-ex_sf <- system.file("extdata", "running_example.txt", package = "rgp")
+ex_sf <- system.file("extdata", "running_example.txt", package = "rgph")
 ( ex_rg <- read_reeb_graph(ex_sf) )
 ( ex_ph <- reeb_graph_persistence(ex_rg) )
 phutil::get_pairs(ex_ph, dimension = 0)
 phutil::get_pairs(ex_ph, dimension = 1)
 
-t10_f <- system.file("extdata", "10_tree_iterations.txt", package = "rgp")
+t10_f <- system.file("extdata", "10_tree_iterations.txt", package = "rgph")
 ( t10 <- read_reeb_graph(t10_f) )
 ( t10_ph <- reeb_graph_persistence(t10) )
 phutil::get_pairs(t10_ph, dimension = 0)

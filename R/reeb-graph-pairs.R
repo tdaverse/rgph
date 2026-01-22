@@ -61,7 +61,7 @@
 #'   for the method used, and `"elapsed_time"` for the elapsed time.
 #' @seealso [reeb_graph_persistence()]
 #' @examples
-#' ex_sf <- system.file("extdata", "running_example.txt", package = "rgp")
+#' ex_sf <- system.file("extdata", "running_example.txt", package = "rgph")
 #' ( ex_rg <- read_reeb_graph(ex_sf) )
 #' ( ex_cp <- reeb_graph_pairs(ex_rg) )
 #' attr(ex_cp, "method")
