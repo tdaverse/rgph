@@ -16,7 +16,8 @@ reeb_graph(values, edgelist)
 read_reeb_graph(file)
 }
 \arguments{
-\item{values}{Numeric vector of function values at vertices.}
+\item{values}{Numeric vector of function values at vertices; may have names,
+which may be duplicated and/or missing.}
 
 \item{edgelist}{2-column integer matrix of linked vertex pairs.}
 

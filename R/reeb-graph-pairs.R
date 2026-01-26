@@ -264,7 +264,10 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
 
   # formatting decisions
   if (is.null(n)) n <- min(npairs, 12L)
-  if (vnames) minlength <- min(minlength, min(attr(x, "vertex_names")))
+  if (vnames) minlength <- min(
+    minlength,
+    min(nchar(attr(x, "vertex_names")), na.rm = TRUE)
+  )
 
   # vertical components
   pair_val <- apply(x[["value"]][seq(n), ], 2L, format)
@@ -276,6 +279,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
       pair_nam, minlength = minlength,
       strict = TRUE, named = FALSE
     )
+    pair_nam[is.na(pair_nam)] <- ""
     pair_nam <- format(pair_nam, width = max(nchar(pair_nam)), justify = "left")
   }
 

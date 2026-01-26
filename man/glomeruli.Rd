@@ -10,9 +10,6 @@
 \item{\code{Nyengaard1993}}{newborn rat (Nyengaard & Marcussen, 1993)}
 }
 }
-\usage{
-Nyengaard1993
-}
 \description{
 These edge lists encode the capillary structure of several
 murine glomeruli.

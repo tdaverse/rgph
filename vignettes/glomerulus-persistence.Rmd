@@ -20,17 +20,49 @@ library(rgph)
 
 
 
-```{r reconstructed glomerulus}
-
-```
-
-
-
 ```{r circuit analysis}
-
-if (is_directed(graph)) graph <- to_undirected(graph)
-L <- laplacian_matrix(graph, sparse = FALSE)
-inv <- solve(L[-nrow(L), -nrow(L)])
-vol <- inv %*% matrix(c(1, rep(0, nrow(L) - 2)), ncol = 1)
-c(vol, 0)
+# compute the Laplacian matrix
+gl_el <- Nyengaard1993
+n <- max(gl_el)
+gl_deg <- tabulate(gl_el, nbins = n)
+gl_adj <- matrix(0, nrow = n, ncol = n)
+for (i in seq(nrow(gl_el))) {
+  gl_adj[gl_el[i, 1], gl_el[i, 2]] <- 
+    gl_adj[gl_el[i, 1], gl_el[i, 2]] + 1
+}
+gl_adj <- gl_adj + t(gl_adj)
+gl_laplacian <- diag(gl_deg) - gl_adj
+# specify and solve the circuit analysis problem
+gl_linv <- solve(gl_laplacian[-n, -n])
+gl_voltage <- c( gl_linv %*% matrix(c(1, rep(0, n - 2)), ncol = 1), 0 )
+names(gl_voltage)[c(1, n)] <- c("A", "E")
+# construct the Reeb graph
+( gl <- reeb_graph(gl_voltage, gl_el) )
 ```
+
+
+
+```{r critical pairs}
+( gl_cp <- reeb_graph_pairs(gl) )
+```
+
+
+
+```{r extended persistent homology, fig.width=4, fig.height=4}
+gl_ph <- reeb_graph_persistence(gl_cp)
+plot(
+  NULL, asp = 1,
+  xlim = range(gl_voltage), ylim = range(gl_voltage),
+  axes = 0, xlab = "", ylab = ""
+)
+axis(side = 1, at = seq(0, max(gl_voltage), by = 1), lty = 0)
+axis(side = 2, at = seq(0, max(gl_voltage), by = 1), lty = 0)
+segments(
+  x0 = 0, y0 = 0,
+  x1 = c(max(gl_voltage), 0, max(gl_voltage)),
+  y1 = c(0, max(gl_voltage), max(gl_voltage))
+)
+points(gl_ph$pairs[[1]], pch = 15, col = 1)
+points(gl_ph$pairs[[2]], pch = 16, col = 2)
+```
+
