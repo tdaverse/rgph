@@ -10,7 +10,8 @@
 #'   The S3 class is a list of `"values"` and `"edgelist"`. The [print()] method
 #'   prints one edge per line, with nodes formatted as "`index[name] (value)`"
 #'
-#' @param values Numeric vector of function values at vertices.
+#' @param values Numeric vector of function values at vertices; may have names,
+#'   which may be duplicated and/or missing.
 #' @param edgelist 2-column integer matrix of linked vertex pairs.
 #' @param x Object of class `reeb_graph`.
 #' @param ... Additional arguments passed to [base::format()].
@@ -82,7 +83,10 @@ format.reeb_graph <- function(x, ..., n = NULL, minlength = 12L) {
   vnames <- ! is.null(names(x[["values"]]))
 
   if (is.null(n)) n <- min(ecount, 12L)
-  if (vnames) minlength <- min(minlength, min(names(x[["values"]])))
+  if (vnames) minlength <- min(
+    minlength,
+    min(nchar(names(x[["values"]])), na.rm = TRUE)
+  )
 
   edge_ind <- format(as.vector(x[["edgelist"]][seq(n), ]))
   edge_val <- format(x[["values"]][as.vector(x[["edgelist"]][seq(n), ])])
@@ -92,6 +96,7 @@ format.reeb_graph <- function(x, ..., n = NULL, minlength = 12L) {
       edge_nam, minlength = minlength,
       strict = TRUE, named = FALSE
     )
+    edge_nam[is.na(edge_nam)] <- ""
     edge_nam <- format(edge_nam, width = max(nchar(edge_nam)), justify = "left")
   }
 
@@ -108,7 +113,7 @@ format.reeb_graph <- function(x, ..., n = NULL, minlength = 12L) {
   cat(paste(
     paste0(
       "Reeb graph with ", vcount, " vertices and ", ecount, " edges ",
-      "on [", frange[1L], ",", frange[2L], "]:"
+      "on [", format(frange[1L]), ",", format(frange[2L]), "]:"
     ),
     paste(edge_fmt, collapse = "\n"),
     if (n <  nrow(x[["edgelist"]])) "...",
