@@ -113,7 +113,7 @@ format.reeb_graph <- function(x, ..., n = NULL, minlength = 12L) {
   cat(paste(
     paste0(
       "Reeb graph with ", vcount, " vertices and ", ecount, " edges ",
-      "on [", frange[1L], ",", frange[2L], "]:"
+      "on [", format(frange[1L]), ",", format(frange[2L]), "]:"
     ),
     paste(edge_fmt, collapse = "\n"),
     if (n <  nrow(x[["edgelist"]])) "...",
