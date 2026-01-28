@@ -14,38 +14,50 @@ knitr::opts_chunk$set(
 )
 ```
 
+
+
 ```{r setup}
 library(mappeR)
 library(igraph)
 library(rgph)
 ```
 
+## Mapper graphs as Reeb graphs
 
+The mapper construction is most commonly used to visualize (often but not always high-dimensional) quantitative data, a role similar to that of the more popular t-SNE and UMAP tools.
+The construction returns a simplicial complex, each simplex of which corresponds to a subset of data points, which is usually visualized using coordinates obtained from graph layout algorithms.
+Whereas the construction relies on a filter function $f : X \to \mathbb{R}$, each simplex in the complex can be decorated by the average filter values of its constituent points.
+This may not yield a filtration function or even a Morse function on the complex, but by focusing only on the vertices we can interpolate along the edges to obtain a Reeb graph.
+This Reeb graph has a distinctive persistent homology that may reveal fundamentally different topological properties than the ordinary homology of the graph or the persistent homology of the sample, both of which approximate the homology of a presumed underlying manifold.
+The goal of this exercise is to illustrate some of these differences.
 
 ```{r}
-x <- as.data.frame(tdaunif::sample_circle(n = 720))
-x <- as.data.frame(tdaunif::sample_circles_interlocked(n = 2520))
-# x <- as.data.frame(tdaunif::sample_tori_interlocked(n = 2520))
+set.seed(680927)
+x <- tdaunif::sample_circle(n = 1260)
+# x <- tdaunif::sample_trefoil(n = 1680)
+# x <- tdaunif::sample_circles_interlocked(n = 2520)
 rownames(x) <- seq(nrow(x))
 pairs(x)
-pc1 <- prcomp(x)$x[, 1]
+pca <- prcomp(x)
+pairs(pca$x)
 ```
 
 
 
 ```{r}
+f <- pca$x[, 1]
 n <- 60
 d <- dist(x)
-r <- range(pc1)
+r <- range(f)
 u <- create_width_balanced_cover(
   r[1] - diff(r) / (n-1), r[2] + diff(r) / (n-1),
   num_bins = n, percent_overlap = 50
 )
 q <- function(ab) { function(x) (ab[1] - x <= 0) & (ab[2] - x > 0) }
 m <- create_mapper_object(
-  data = x,
+  data = as.data.frame(x),
   dists = d,
-  filtered_data = pc1,
+  filtered_data = f,
   cover_element_tests = apply(u, 1, q),
   clusterer = local_hierarchical_clusterer("single")
 )
@@ -55,6 +67,7 @@ m <- create_mapper_object(
 
 ```{r}
 g <- graph_from_data_frame(m[[2]], directed = FALSE, vertices = m[[1]])
+table(degree(g))
 plot(g, vertex.label = NA)
 ```
 
@@ -66,6 +79,7 @@ rg <- reeb_graph(
   edgelist = cbind(as.numeric(m[[2]]$source), as.numeric(m[[2]]$target))
 )
 ph <- reeb_graph_persistence(rg)
+m_range <- range(x[m[[1]]$medoid, 1])
 ```
 
 
