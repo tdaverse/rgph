@@ -159,14 +159,14 @@ reeb_graph_pairs.reeb_graph <- function(
   # the name of the Java class we need to instantiate for the pairing method
   pairing_java_object <- switch(
     method,
-    single_pass = paste("usf.saav.cmd.", "MergePairingCLI", sep = ""),
-    multi_pass = paste("usf.saav.cmd.", "PPPairingCLI", sep = "")
+    multi_pass = paste("usf.saav.cmd.", "MergePairingCLI", sep = ""),
+    single_pass = paste("usf.saav.cmd.", "PPPairingCLI", sep = "")
   )
   # the Java project file path of the corresponding pairing type
   java_file_path <- switch(
     method,
-    single_pass = paste("usf/saav/cmd/", "MergePairingCLI", sep=""),
-    multi_pass = paste("usf/saav/cmd/", "PPPairingCLI", sep="")
+    multi_pass = paste("usf/saav/cmd/", "MergePairingCLI", sep=""),
+    single_pass = paste("usf/saav/cmd/", "PPPairingCLI", sep="")
   )
 
   jhw <- .jnew(pairing_java_object)
