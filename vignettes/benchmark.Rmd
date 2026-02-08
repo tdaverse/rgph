@@ -1,0 +1,78 @@
+---
+title: "Runtime Comparison of Critical Pairing Algorithms"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Runtime Comparison of Critical Pairing Algorithms}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{dplyr,bench}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+
+```{r setup}
+library(rgph)
+library(dplyr)
+```
+
+
+
+```{r example}
+ex_file <- system.file("extdata", "running_example.txt", package = "rgph")
+ex_reeb <- read_reeb_graph(ex_file)
+bench::mark(
+  multi = reeb_graph_pairs(ex_reeb, method = "multi_pass"),
+  single = reeb_graph_pairs(ex_reeb, method = "single_pass"),
+  check = FALSE
+)
+```
+
+
+
+```{r flower}
+flower_file <- system.file("extdata", "flower_reebgraph.txt", package = "rgph")
+flower_reeb <- read_reeb_graph(flower_file)
+bench::mark(
+  multi = reeb_graph_pairs(flower_reeb, method = "multi_pass"),
+  single = reeb_graph_pairs(flower_reeb, method = "single_pass"),
+  check = FALSE
+)
+```
+
+
+
+```{r random (split) trees}
+# collect split tree Reeb graphs
+tree_files <- vapply(
+  c(
+    `10` = "10_tree_iterations.txt",
+    `100` = "100_tree_iterations.txt",
+    `1000` = "1000_tree_iterations.txt"
+  ),
+  function(f) system.file("extdata", f, package = "rgph"),
+  ""
+)
+tree_reebs <- lapply(tree_files, read_reeb_graph)
+# aggregate benchmark comparisons
+tree_bench <- tibble()
+for (i in seq_along(tree_reebs)) {
+  bm <- bench::mark(
+    multi = reeb_graph_pairs(tree_reebs[[i]], method = "multi_pass"),
+    single = reeb_graph_pairs(tree_reebs[[i]], method = "single_pass"),
+    check = FALSE
+  )
+  tree_bench <- bind_rows(
+    tree_bench,
+    relocate(mutate(bm, size = as.integer(names(tree_files)[[i]])), size)
+  )
+}
+# plot results
+
+```
