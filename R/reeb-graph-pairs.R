@@ -287,7 +287,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
   pair_fmt <- matrix(paste0(
     # high type
     c(
-      LEAF_MIN = "", UPFORK = "", LEAF_MAX = "-- ", DOWNFORK = ">- "
+      LEAF_MIN = "", UPFORK = "", LEAF_MAX = "-• ", DOWNFORK = ">- "
     )[x[["type"]][seq(n), ]],
     # node info
     pair_ind,
@@ -295,7 +295,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
     " (", pair_val, ")",
     # low type
     c(
-      LEAF_MIN = " --", UPFORK = " -<", LEAF_MAX = "", DOWNFORK = ""
+      LEAF_MIN = " •-", UPFORK = " -<", LEAF_MAX = "", DOWNFORK = ""
     )[x[["type"]][seq(n), ]]
   ), ncol = 2L)
   pair_fmt <- apply(pair_fmt, 1L, paste, collapse = " ... ")
