@@ -38,11 +38,19 @@
 #' phutil::get_pairs(t10_ph, dimension = 0)
 #'
 #' @export
-reeb_graph_persistence <- function(x, ...) UseMethod("reeb_graph_persistence")
+reeb_graph_persistence <- function(
+    x,
+    scale = c("value", "index", "order"),
+    ...
+) UseMethod("reeb_graph_persistence")
 
 #' @rdname reeb_graph_persistence
 #' @export
-reeb_graph_persistence.default <- function(x, ...) {
+reeb_graph_persistence.default <- function(
+    x,
+    scale = c("value", "index", "order"),
+    ...
+) {
   stop(paste0(
     "No `reeb_graph_persistence()` method for class(es) '",
     paste(class(x), collapse = "', '"),

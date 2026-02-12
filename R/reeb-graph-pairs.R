@@ -96,11 +96,21 @@
 #' @template ref-tu2019
 #' @template ref-carriere2018
 #' @export
-reeb_graph_pairs <- function(x, ...) UseMethod("reeb_graph_pairs")
+reeb_graph_pairs <- function(
+    x,
+    sublevel = TRUE,
+    method = c("single_pass", "multi_pass"),
+    ...
+) UseMethod("reeb_graph_pairs")
 
 #' @rdname reeb_graph_pairs
 #' @export
-reeb_graph_pairs.default <- function(x, ...) {
+reeb_graph_pairs.default <- function(
+    x,
+    sublevel = TRUE,
+    method = c("single_pass", "multi_pass"),
+    ...
+) {
   stop(paste0(
     "No `reeb_graph_pairs()` method for class(es) '",
     paste(class(x), collapse = "', '"),

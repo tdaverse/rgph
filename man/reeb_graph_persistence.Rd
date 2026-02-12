@@ -9,9 +9,9 @@
 \alias{reeb_graph_persistence.reeb_graph_pairs}
 \title{Compute Extended Persistent Homology of a Reeb Graph}
 \usage{
-reeb_graph_persistence(x, ...)
+reeb_graph_persistence(x, scale = c("value", "index", "order"), ...)
 
-\method{reeb_graph_persistence}{default}(x, ...)
+\method{reeb_graph_persistence}{default}(x, scale = c("value", "index", "order"), ...)
 
 \method{reeb_graph_persistence}{igraph}(
   x,
@@ -46,6 +46,9 @@ reeb_graph_persistence(x, ...)
 \code{\link{reeb_graph_pairs}} object, or an object that can be
 \link[=as_reeb_graph]{coerced to class "reeb_graph"}.}
 
+\item{scale}{Character; the scale parameter used by the persistent pairs.
+Matched to \code{"value"} (the default), \code{"index"}, or \code{"order"}.}
+
 \item{...}{Additional arguments passed to methods.}
 
 \item{values}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
@@ -60,9 +63,6 @@ the default) or else the superlevel set filtration (via reversing
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
-
-\item{scale}{Character; the scale parameter used by the persistent pairs.
-Matched to \code{"value"} (the default), \code{"index"}, or \code{"order"}.}
 }
 \value{
 A \link[phutil:persistence]{phutil::persistence} object.
