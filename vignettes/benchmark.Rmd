@@ -5,7 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Runtime Comparison of Critical Pairing Algorithms}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{dplyr,bench}
+  %\VignetteDepends{dplyr,tidyr,ggplot2,bench}
 ---
 
 ```{r, include = FALSE}
@@ -15,24 +15,50 @@ knitr::opts_chunk$set(
 )
 ```
 
-
+This vignette compares the runtimes and memory allocations of the multi-pass and single-pass algorithms for pairing critical points.
+Several tidyverse packages are used to post-process the benchmark results:
 
 ```{r setup}
 library(rgph)
 library(dplyr)
+library(tidyr)
+library(ggplot2)
 ```
 
+## The running example
 
+To illustrate, compare the results of the two algorithms on the running example from Tu &al (2018):
 
-```{r example}
+```{r example calculation}
 ex_file <- system.file("extdata", "running_example.txt", package = "rgph")
 ex_reeb <- read_reeb_graph(ex_file)
+( ex_multi <- reeb_graph_pairs(ex_reeb, method = "multi_pass") )
+( ex_single <- reeb_graph_pairs(ex_reeb, method = "single_pass") )
+all.equal(ex_multi, ex_single)
+```
+
+We expect the resulting data frames to be equivalent, but the output contains the attributes `method` and `elapsed_time` that we expect to be different.
+If we ignore attributes, then we find the results to agree:
+
+```{r example validation}
+all.equal(ex_multi, ex_single, check.attributes = FALSE)
+```
+
+For this reason, and to avoid incurring additional runtime costs, we omit the default check in the benchmarking run:
+
+```{r example benchmark}
 bench::mark(
   multi = reeb_graph_pairs(ex_reeb, method = "multi_pass"),
   single = reeb_graph_pairs(ex_reeb, method = "single_pass"),
   check = FALSE
 )
 ```
+
+The R bindings are equivalent; while total runtimes will be higher than when comparing the Java programs directly, the differences between them should be the same.
+Indeed, the allocated memory is exactly the same.
+However, the single-pass algorithm---Propagate and Pair---is a marginal improvement over the multiple-pass merge pairing algorithm.
+
+## A more complex case
 
 
 
@@ -48,6 +74,10 @@ bench::mark(
 
 
 
+## How performance and improvement scale
+
+
+
 ```{r random (split) trees}
 # collect split tree Reeb graphs
 tree_files <- vapply(
@@ -60,6 +90,7 @@ tree_files <- vapply(
   ""
 )
 tree_reebs <- lapply(tree_files, read_reeb_graph)
+tree_reebs <- lapply(tree_reebs, function(rg) { rg$values <- -rg$values; rg })
 # aggregate benchmark comparisons
 tree_bench <- tibble()
 for (i in seq_along(tree_reebs)) {
@@ -68,11 +99,23 @@ for (i in seq_along(tree_reebs)) {
     single = reeb_graph_pairs(tree_reebs[[i]], method = "single_pass"),
     check = FALSE
   )
-  tree_bench <- bind_rows(
-    tree_bench,
-    relocate(mutate(bm, size = as.integer(names(tree_files)[[i]])), size)
+  bm <- transmute(
+    bm,
+    method = as.character(expression),
+    n_itr, time, memory
   )
+  bm <- relocate(mutate(bm, size = as.integer(names(tree_files)[[i]])), size)
+  tree_bench <- bind_rows(tree_bench, bm)
 }
-# plot results
-
+# plot runtime results
+tree_bench %>%
+  select(size, method, time) %>%
+  unnest(time) %>%
+  ggplot(aes(x = as.factor(size), y = time * 1e6)) +
+  geom_boxplot(aes(color = method, shape = method)) +
+  scale_y_continuous(
+    transform = "log1p",
+    labels = scales::label_number(suffix = "µs")
+  ) +
+  labs(x = "tree size", y = "run time")
 ```
