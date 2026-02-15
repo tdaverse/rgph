@@ -27,17 +27,17 @@ reeb_graph_pairs(
 
 \method{reeb_graph_pairs}{igraph}(
   x,
-  values = NULL,
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
+  values = NULL,
   ...
 )
 
 \method{reeb_graph_pairs}{network}(
   x,
-  values = NULL,
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
+  values = NULL,
   ...
 )
 

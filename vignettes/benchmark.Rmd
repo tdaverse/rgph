@@ -1,11 +1,11 @@
 ---
-title: "Runtime Comparison of Critical Pairing Algorithms"
+title: "Runtime Comparison of Critical Point Pairing Algorithms"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Runtime Comparison of Critical Pairing Algorithms}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{dplyr,tidyr,ggplot2,bench}
+  %\VignetteDepends{dplyr,tidyr,scales,ggplot2,bench}
 ---
 
 ```{r, include = FALSE}
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 This vignette compares the runtimes and memory allocations of the multi-pass and single-pass algorithms for pairing critical points.
 Several tidyverse packages are used to post-process the benchmark results:
 
-```{r setup}
+```{r setup, message=FALSE}
 library(rgph)
 library(dplyr)
 library(tidyr)
@@ -44,7 +44,7 @@ If we ignore attributes, then we find the results to agree:
 all.equal(ex_multi, ex_single, check.attributes = FALSE)
 ```
 
-For this reason, and to avoid incurring additional runtime costs, we omit the default check in the benchmarking run:
+For this reason, we omit the default check in the benchmarking run:
 
 ```{r example benchmark}
 bench::mark(
@@ -60,9 +60,24 @@ However, the single-pass algorithm---Propagate and Pair---is a marginal improvem
 
 ## A more complex case
 
+The exported object `flower` is a `reeb_graph` constructed from the flower mesh, one of 12 from the `AIM@SHAPE` collection used by Tu &al to benchmark algorithms.
+Among them, it contains the most critical points, so it will better illustrate the difference between the algorithms in computationally intensive settings.
 
+```{r flower data}
+# print only a few edges for illustration
+print(flower, n = 4)
+```
 
-```{r flower}
+However, this Reeb graph contains isolated vertices, which contribute no positive-persistent features to the output but must be dropped before calculation, lest they seize up the algorithms:
+
+```{r flower isolates}
+# print only a few pairs for illustration
+print(reeb_graph_pairs(flower, method = "multi_pass"), n = 4)
+```
+
+So that the benchmark results are more reflective of the algorithms' requirements, we manually drop these points first:
+
+```{r flower benchmark}
 flower <- rgph:::drop_reeb_graph_points(flower)
 bench::mark(
   multi = reeb_graph_pairs(flower, method = "multi_pass"),
@@ -71,7 +86,7 @@ bench::mark(
 )
 ```
 
-
+For this Reeb graph, Propagate and Pair outperforms the multi-pass algorithm by roughly a factor of 3.
 
 ## How performance and improvement scale
 

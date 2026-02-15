@@ -15,27 +15,27 @@ reeb_graph_persistence(x, scale = c("value", "index", "order"), ...)
 
 \method{reeb_graph_persistence}{igraph}(
   x,
-  values = NULL,
+  scale = c("value", "index", "order"),
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
-  scale = c("value", "index", "order"),
+  values = NULL,
   ...
 )
 
 \method{reeb_graph_persistence}{network}(
   x,
-  values = NULL,
+  scale = c("value", "index", "order"),
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
-  scale = c("value", "index", "order"),
+  values = NULL,
   ...
 )
 
 \method{reeb_graph_persistence}{reeb_graph}(
   x,
+  scale = c("value", "index", "order"),
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
-  scale = c("value", "index", "order"),
   ...
 )
 
@@ -51,18 +51,18 @@ Matched to \code{"value"} (the default), \code{"index"}, or \code{"order"}.}
 
 \item{...}{Additional arguments passed to methods.}
 
-\item{values}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
-node attribute to use as the Reeb graph value function. If \code{NULL} (the
-default), the first numeric node attribute is used. For coercion \emph{from}
-class \code{reeb_graph}, a character value; the name of the node attribute in
-which to store the Reeb graph value function.}
-
 \item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
 the default) or else the superlevel set filtration (via reversing
 \code{x[["values"]]} before paring critical points.}
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
+
+\item{values}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
+node attribute to use as the Reeb graph value function. If \code{NULL} (the
+default), the first numeric node attribute is used. For coercion \emph{from}
+class \code{reeb_graph}, a character value; the name of the node attribute in
+which to store the Reeb graph value function.}
 }
 \value{
 A \link[phutil:persistence]{phutil::persistence} object.

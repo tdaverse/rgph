@@ -120,9 +120,9 @@ reeb_graph_pairs.default <- function(
 
 reeb_graph_pairs_graph <- function(
     x,
-    values = NULL,
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
+    values = NULL,
     ...
 ) {
   x <- as_reeb_graph(x, values = values)
@@ -311,7 +311,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
   pair_fmt <- matrix(paste0(
     # high type
     c(
-      LEAF_MIN = "", UPFORK = "", LEAF_MAX = "-• ", DOWNFORK = ">- "
+      LEAF_MIN = "", UPFORK = "", LEAF_MAX = "-\u2022 ", DOWNFORK = ">- "
     )[x[["type"]][seq(n), ]],
     # node info
     pair_ind,
@@ -319,7 +319,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
     " (", pair_val, ")",
     # low type
     c(
-      LEAF_MIN = " •-", UPFORK = " -<", LEAF_MAX = "", DOWNFORK = ""
+      LEAF_MIN = " \u2022-", UPFORK = " -<", LEAF_MAX = "", DOWNFORK = ""
     )[x[["type"]][seq(n), ]]
   ), ncol = 2L)
   pair_fmt <- apply(pair_fmt, 1L, paste, collapse = " ... ")
