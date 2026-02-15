@@ -120,9 +120,9 @@ reeb_graph_pairs.default <- function(
 
 reeb_graph_pairs_graph <- function(
     x,
-    values = NULL,
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
+    values = NULL,
     ...
 ) {
   x <- as_reeb_graph(x, values = values)
