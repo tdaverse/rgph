@@ -51,7 +51,11 @@ Suggests:
     igraph (>= 0.6-0),
     network (>= 1.19.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    dplyr,
+    tidyr,
+    ggplot2,
+    bench
 SystemRequirements: Java (>= 5.0)
 License: GPL-3
 Packaged: 2014-09-04 13:17:36 UTC; tverbeke
