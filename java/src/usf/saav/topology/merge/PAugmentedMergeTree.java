@@ -58,37 +58,37 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 	private joclMemory d_cps;
 	private joclMemory d_scratch;
 	private joclMemory d_histogram;
-	
+
 	ScalarField2D sf = null;
-	
+
 	Vector<EventTimer> events = new Vector<EventTimer>();
 
 	int histogramBinN = 128;
 
 	boolean verbose = false;
-	
+
 	boolean operationComplete = false;
-	
-	
+
+
 	public PAugmentedMergeTree( joclDevice _device ){
 		this(_device,false);
 	}
 
 	public PAugmentedMergeTree( joclDevice _device, boolean _verbose ){
 		//super(verbose);
-		
+
 		verbose = _verbose;
-		
+
 		this.device = _device;
 
 		String dir = "/usf/saav/topology/join/parallel";
-		
+
 		try {
-				
+
 			kernel_djs   		= device.buildProgram( new joclResourceLoader(dir,"kernel_djs.cl"), 		    "kernel_djs"     );
 			kernel_cps_bin		= device.buildProgram( new joclResourceLoader(dir,"kernel_cps_bucket_sort.cl"),	"kernel_cps_bucket" );
 			kernel_cps_bin_sort	= device.buildProgram( new joclResourceLoader(dir,"kernel_cps_bucket_sort.cl"),	"kernel_cps_bucket_sort" );
-			
+
 			if( device.getMaxWorkGroupSize() == 256 ){
 				kernel_cps_extract		= device.buildProgram( new joclResourceLoader(dir,"kernel_cps_extract.cl"),		"kernel_cps_extract_256" );
 				kernel_cps_propagate	= device.buildProgram( new joclResourceLoader(dir,"kernel_cps_propagate.cl"),	"kernel_cps_propagate_256" );
@@ -97,26 +97,26 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 				kernel_cps_extract		= device.buildProgram( new joclResourceLoader(dir,"kernel_cps_extract.cl"),		"kernel_cps_extract_1024" );
 				kernel_cps_propagate	= device.buildProgram( new joclResourceLoader(dir,"kernel_cps_propagate.cl"),	"kernel_cps_propagate_1024" );
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	public void release( ){
-		 
+
 		if( sf != null ){
 			d_field.release();
 			d_djs.release();
 			d_cps.release();
 			d_scratch.release();
 			d_histogram.release();
-		}		
+		}
 		sf = null;
-		
+
 	}
-		
+
 
 	public void writeDJSInfo( PrintStream ps, boolean showIdx ){
 		try {
@@ -133,7 +133,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			e.printStackTrace();
 		}
 	}
-	
+
 	class HashDJSRecord {
 		int key;
 		int value;
@@ -146,16 +146,16 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			ByteBuffer tmp_djs = ByteBuffer.allocate( (int)d_djs.size() );
 			tmp_djs.order( ByteOrder.LITTLE_ENDIAN );
 			d_djs.enqueueReadBuffer( true, tmp_djs );
-			
+
 			int heapp = tmp_djs.getInt();
 			System.out.println("heap: " + heapp);
-	
+
 			int [] pntr = new int[2048];
 			for(int i = 0; i < pntr.length; i++){
 				pntr[i] = tmp_djs.getInt();
 			}
-			
-			HashDJSRecord [] rec = new HashDJSRecord[heapp]; 
+
+			HashDJSRecord [] rec = new HashDJSRecord[heapp];
 			for(int i = 0; i < rec.length; i++){
 				rec[i] = new HashDJSRecord();
 				rec[i].key = tmp_djs.getInt();
@@ -182,10 +182,10 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 	}
 
 	public void writeCPInfo( PrintStream ps ){
-		
+
 		ByteBuffer tmp_cps = ByteBuffer.allocate( (int)d_cps.size() );
 		tmp_cps.order( ByteOrder.LITTLE_ENDIAN );
-		
+
 		try {
 			d_cps.enqueueReadBuffer(true, tmp_cps);
 		} catch (joclException e) {
@@ -196,7 +196,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 
 		int hpointer = tmp_cps.getInt();
 		int cpsN = (hpointer-1)/CPSTransfer.size();
-	
+
 		int disp = 0;
 		ps.println("heap pointer: " + hpointer + " (" + cpsN + " cps)");
 		for(int i = 0; i < sf.getSize() && i < cpsN*2; i++){
@@ -209,15 +209,15 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			//}
 		}
 		ps.println();
-		
+
 	}
-	
+
 	class HashRecord {
 		int value;
 		int data;
 		int next;
 	}
-	
+
 	public void writeScratchInfo( PrintStream ps, boolean showLocks ){
 		ByteBuffer tmp_scratch = ByteBuffer.allocate( (int)d_scratch.size() );
 		tmp_scratch.order( ByteOrder.LITTLE_ENDIAN );
@@ -232,13 +232,13 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			tmp_scratch.position(loop*2048*4);
 			int heapp = tmp_scratch.getInt();
 			System.out.println("heap: " + heapp);
-	
+
 			int [] pntr = new int[64];
 			for(int i = 0; i < pntr.length; i++){
 				pntr[i] = tmp_scratch.getInt();
 			}
-			
-			HashRecord [] rec = new HashRecord[heapp]; 
+
+			HashRecord [] rec = new HashRecord[heapp];
 			for(int i = 0; i < rec.length; i++){
 				rec[i] = new HashRecord();
 				rec[i].value = tmp_scratch.getInt();
@@ -253,11 +253,11 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 					System.out.print( "(" + rec[cur].value + "->" + rec[cur].data + ") " );
 					cur = rec[cur].next;
 				}
-				
+
 				System.out.println();
 			}
-		}		
-		
+		}
+
 		/*
 			for(int i = 0; i < sf.getSize(); i++){
 				int val = tmp_scratch.getInt();
@@ -276,8 +276,8 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			ps.println( count );
 			int iter = tmp_scratch.getInt();
 			ps.println( iter );
-			
-		
+
+
 			for( int i = sf.getSize()+2, j =0; i < d_scratch.size()/4 && j < iter; i++, j++ ){
 				int off = tmp_scratch.getInt();
 				int cnt = tmp_scratch.getInt();
@@ -287,7 +287,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			ps.println();
 			*/
 	}
-	
+
 
 	public void writeStats( PrintStream ps ){
 		for( EventTimer e : events){
@@ -308,7 +308,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 		ps.print("saddles_unprocessed, ");
 		ps.println("tree_size");
 	}
-	
+
 	public void writeStatsCSV( PrintStream ps ){
 		for( EventTimer e : events){
 			ps.print(e.getElapsedTimeMilliseconds() + ", ");
@@ -320,14 +320,14 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 	}
 
   public abstract void calculate( ScalarField2D _sf ) ;
-  
+
 
 	protected void calculate( ScalarField2D __sf, boolean invert ){
-		
+
 		ScalarField2D _sf = new ScalarField2D.Padded( __sf, 16, 16 );
 
 		events.clear();
-		
+
 		if( sf != null && sf.getSize() < _sf.getSize() ){
 			d_field.release();
 			d_djs.release();
@@ -336,7 +336,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			d_histogram.release();
 			sf = null;
 		}
-		
+
 		if( sf == null ){
 			d_field     = device.createBuffer( "field",     CL_MEM_READ_ONLY,  4*_sf.getSize() );
 			d_djs       = device.createBuffer( "djs",       CL_MEM_READ_WRITE, Math.max(4*_sf.getSize(), 4*(1+2048+2048*4) ) );
@@ -344,15 +344,15 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			d_scratch   = device.createBuffer( "scratch",   CL_MEM_READ_WRITE, 4*_sf.getSize() );
 			d_histogram = device.createBuffer( "histogram", CL_MEM_READ_WRITE, 4* (1 + 2 + histogramBinN + histogramBinN) ); // 1 for bin count, 2 for min/max, N for bins, N for bin offsets
 		}
-		
+
 		sf = _sf;
 
 		EventTimer.Default complete_time = new EventTimer.Default("start_to_finish");
 		events.add(complete_time);
 		complete_time.start();
-		
+
 		try {
-			
+
 			float [] data = new float[sf.getSize()];
 			float minV =  Float.MAX_VALUE;
 			float maxV = -Float.MAX_VALUE;
@@ -372,17 +372,17 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			}
 			joclEvent event_field_write   = d_field.enqueueWriteBuffer(false, data);
 			events.add(event_field_write);
-			
+
 			joclEvent event_djs_write     = d_djs.enqueueFillBuffer( new byte[]{0} );
 			events.add(event_djs_write);
-			
+
 			joclEvent event_cps_write     = d_cps.enqueueFillBuffer( new byte[]{0} );
 			events.add(event_cps_write);
 
 			joclEvent event_scratch_write = d_scratch.enqueueFillBuffer( new byte[]{0} );
 			events.add(event_scratch_write);
 
-			
+
 
 			ByteBuffer histogram = ByteBuffer.allocate(4*(1+2+histogramBinN*2));
 			histogram.order( ByteOrder.LITTLE_ENDIAN );
@@ -396,19 +396,19 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			joclEvent event_histogram_write = d_histogram.enqueueWriteBuffer( false, histogram );
 			events.add(event_histogram_write);
 
-			
+
 			int arg = 0;
-			
+
 			/*
 			arg = 0;
-			kernel_djs_init.setKernelArg( arg++, sf.getWidth() ); 
+			kernel_djs_init.setKernelArg( arg++, sf.getWidth() );
 			kernel_djs_init.setKernelArg( arg++, sf.getHeight() );
 			kernel_djs_init.setKernelArg( arg++, d_field );
 			kernel_djs_init.setKernelArg( arg++, d_djs );
 			joclEvent event_init_djs = kernel_djs_init.enqueueNDRangeKernel( new long[]{sf.getWidth(),sf.getHeight()}, event_histogram_write.event, event_field_write.event, event_djs_write.event );
 			events.add(event_init_djs);
-			
-			
+
+
 			arg = 0;
 			kernel_djs_simplify.setKernelArg( arg++, sf.getWidth() );
 			kernel_djs_simplify.setKernelArg( arg++, sf.getHeight() );
@@ -417,7 +417,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			events.add(event_simplify_djs);
 			 */
 
-			kernel_djs.setKernelArg( 0, sf.getWidth() ); 
+			kernel_djs.setKernelArg( 0, sf.getWidth() );
 			kernel_djs.setKernelArg( 1, sf.getHeight() );
 			kernel_djs.setKernelArg( 2, d_field );
 			kernel_djs.setKernelArg( 3, d_djs );
@@ -438,15 +438,15 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			kernel_cps_extract.setKernelArg( arg++, d_histogram );
 			joclEvent event_extract_cps = kernel_cps_extract.enqueueNDRangeKernel( new long[]{sf.getWidth(),sf.getHeight()}, event_cps_write.event, event_simplify_djs.event );
 			events.add(event_extract_cps);
-			
-			
+
+
 						arg = 0;
 			kernel_cps_bin.setKernelArg( arg++, d_cps );
 			kernel_cps_bin.setKernelArg( arg++, d_histogram );
 			joclEvent event_cps_bucket = kernel_cps_bin.enqueueNDRangeKernel( new long[]{sf.getWidth()*sf.getHeight()}, event_extract_cps.event );
 			events.add(event_cps_bucket);
 
-			
+
 			arg = 0;
 			kernel_cps_bin_sort.setKernelArg( arg++, d_cps );
 			kernel_cps_bin_sort.setKernelArg( arg++, d_histogram );
@@ -468,11 +468,11 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			kernel_cps_propagate.setKernelArg( 1, d_djs );
 			kernel_cps_propagate.setKernelArg( 3, d_scratch );
 			kernel_cps_propagate.setKernelArg( 4, (int)0 );
-			
+
 			long wgs = device.getMaxWorkGroupSize();
-			long cpsWork = (cpsN+wgs-1) - ( (cpsN+wgs-1)%wgs ); 
+			long cpsWork = (cpsN+wgs-1) - ( (cpsN+wgs-1)%wgs );
 			joclEvent lastEvent = event_cpsN_read;
-			
+
 
 			joclEvent event_cps_propagate_clear_djs = d_djs.enqueueFillBuffer( Integer.MAX_VALUE, lastEvent.event );
 			events.add(event_cps_propagate_clear_djs);
@@ -494,7 +494,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 				joclEvent event_cps_propagate_phase_X = kernel_cps_propagate.enqueueNDRangeKernel( new long[]{cpsWork-cpsOffset}, lastEvent.event );
 				prop_event.add(event_cps_propagate_phase_X);
 				lastEvent = event_cps_propagate_phase_X;
-				
+
 				if( phase > 1 ){
 					d_scratch.enqueueReadBuffer(true, (phase-1)*8, res, lastEvent.event );
 					cpsOffset = (int) (res[1]-(res[1]%wgs));
@@ -502,45 +502,45 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 					if( res[1] > cpsN ) break;
 				}
 			}
-			
-			
-			
+
+
+
 			//ByteBuffer tmp_cps = ByteBuffer.allocate( (int) d_cps.size() );
 			ByteBuffer tmp_cps = ByteBuffer.allocate( hpointer*4 );
 			tmp_cps.order( ByteOrder.LITTLE_ENDIAN );
 			joclEvent event_cps_read = d_cps.enqueueReadBuffer(true, tmp_cps, lastEvent.event );
 			events.add(event_cps_read);
-			
+
 			EventTimer.Default proc_cps = new EventTimer.Default("processCPS");
 			proc_cps.start();
 			//processCPS( tmp_cps );
 			fastProcessCPS( tmp_cps );
 			proc_cps.stop();
 			events.add(proc_cps);
-			
+
 		} catch (joclException e) {
 			e.printStackTrace();
 		}
-		
+
 		complete_time.stop();
-		
+
 		calculatePersistence();
-		
+
 		operationComplete = true;
-		
+
 	}
 
 
-	
+
 	static private class CPSTransfer {
 		int read = 0;
 		int id;
 		float val;
 		int ref;
 		int [] setID = new int[8];
-				
+
 		static int size(){ return 11; }
-		
+
 		public boolean loadNext( ByteBuffer stream ){
 			read++;
 			id  = stream.getInt();
@@ -551,7 +551,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			}
 			return true;
 		}
-		
+
 		public void print( PrintStream to ){
 			to.print( "[" + read + "] " + id + " (value: " + val + ") (ref: " + ref + ") -- ");
 			for(int j = 0; j < 8; j++){
@@ -565,9 +565,9 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 	int invalid     = 0;
 	int unprocessed = 0;
 	int total		= 0;
-	
+
 	private void fastProcessCPS( ByteBuffer tmp_cps ){
-		
+
 		processed   = 0;
 		invalid     = 0;
 		unprocessed = 0;
@@ -575,7 +575,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 
 		HashMap<Integer,PAugmentedMergeTreeNode> cp_map = new HashMap<Integer,PAugmentedMergeTreeNode>( );
 		CPSTransfer currCP = new CPSTransfer( );
-		
+
 		int hpointer = tmp_cps.getInt();
 		int cpsN     = (hpointer-1)/CPSTransfer.size();
 		System.out.println( "CPS: " + cpsN );
@@ -585,14 +585,14 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			if( currCP.ref <= -2 ) processed++;
 			else if( currCP.ref <= 1 ) invalid++;
 			else unprocessed++;
-			
+
 			if( currCP.ref >= 2 ){
-				
+
 				PAugmentedMergeTreeNode currPJTN = createTreeNode( currCP.id );
 				grid.add(currPJTN);
 				total++;
 				System.out.print( currCP.id + " -- " );
-				
+
 				for(int j = 0; j < currCP.ref; j++){
 					PAugmentedMergeTreeNode chldPJTN = cp_map.get( currCP.setID[j] );
 					System.out.print( currCP.setID[j] + ", " );
@@ -602,7 +602,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 						total++;
 					}
 					currPJTN.addChild( chldPJTN );
-					
+
 					cp_map.put( currCP.setID[j], currPJTN );
 				}
 				System.out.println();
@@ -611,19 +611,19 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 		}
 		//total = cp_map.size();
 	}
-	
-	
+
+
 	private void processCPS(ByteBuffer tmp_cps) {
-		
+
 		processed   = 0;
 		invalid     = 0;
 		unprocessed = 0;
 
 		HashMap<Integer,PAugmentedMergeTreeNode> cp_map = new HashMap<Integer,PAugmentedMergeTreeNode>( );
 		ArrayDisjointSet djs = new ArrayDisjointSet( sf.getSize() );
-		
+
 		CPSTransfer currCP = new CPSTransfer( );
-		
+
 		int hpointer = tmp_cps.getInt();
 		int cpsN = (hpointer-1)/CPSTransfer.size();
 		System.out.println( "Heap Pointer: " + hpointer + " cps:" + cpsN);
@@ -633,15 +633,15 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 			if( currCP.ref <= -2 ) processed++;
 			else if( currCP.ref <= 1 ) invalid++;
 			else unprocessed++;
-			
+
 			if( currCP.ref <= -2 ){
-				
+
 				PAugmentedMergeTreeNode currPJTN = cp_map.get( currCP.id );
 				if( currPJTN == null ){
 					currPJTN = createTreeNode( currCP.id );
 					cp_map.put( currCP.id, currPJTN );
 				}
-				
+
 				for(int j = 0; j < 8; j++){
 					if( currCP.setID[j] >= 0 ){
 						PAugmentedMergeTreeNode chldPJTN = cp_map.get( currCP.setID[j] );
@@ -649,7 +649,7 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 							chldPJTN = createTreeNode( currCP.setID[j] );
 							cp_map.put( currCP.setID[j],  chldPJTN );
 						}
-						
+
 						currPJTN.addChild( chldPJTN );
 					}
 				}
@@ -685,29 +685,29 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 	}
 
 
-	
-		
-	
+
+
+
 	protected abstract PAugmentedMergeTreeNode createTreeNode( int sf_node );
-	
+
 	public abstract class PAugmentedMergeTreeNode extends AbstractMergeTreeNode implements TopoTreeNode {
-		
+
 		int idx;
-		
+
 		protected PAugmentedMergeTreeNode( Integer _idx ) {
 			super(_idx);
 			idx = _idx;
 		}
-		
+
 		protected PAugmentedMergeTreeNode( int _u,int _v ){
-			super( new Integer(_v*sf.getWidth()+_u) );
+			super( Integer.valueOf(_v*sf.getWidth()+_u) );
 			idx = _v*sf.getWidth()+_u;
-			
+
 		}
-		
+
 		@Override public float   getValue(){ return sf.getValue(idx); }
 		//@Override public int     getPosition(){ return idx; }
-		
+
 		@Override public void addChild( AbstractMergeTreeNode c ){
 			if( this.children.size() < 2 ){
 				super.addChild(c);
@@ -722,10 +722,10 @@ public abstract class PAugmentedMergeTree  extends AbstractAugmentedMergeTree {
 				newc1.addChild(c1);
 			}
 		}
-		
+
 	}
 
-	
-	
+
+
 
 }
