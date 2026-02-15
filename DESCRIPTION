@@ -54,6 +54,7 @@ Suggests:
     rmarkdown,
     dplyr,
     tidyr,
+    scales,
     ggplot2,
     bench
 SystemRequirements: Java (>= 5.0)

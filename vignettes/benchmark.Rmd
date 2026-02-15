@@ -5,7 +5,7 @@ vignette: >
   %\VignetteIndexEntry{Runtime Comparison of Critical Pairing Algorithms}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{dplyr,tidyr,ggplot2,bench}
+  %\VignetteDepends{dplyr,tidyr,scales,ggplot2,bench}
 ---
 
 ```{r, include = FALSE}
