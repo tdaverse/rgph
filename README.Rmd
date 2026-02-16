@@ -1,0 +1,71 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# rgph
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+Reeb graphs arise as low-dimensional quotients of higher-dimensional topological spaces, with topological structure that is informative but quicker and easier to compute.
+**rgph** provides an S3 class and constructors for Reeb graphs, bindings to the [`ReebGraphPairing`](https://github.com/USFDataVisualization/ReebGraphPairing) Java library for pairing their critical points, post-processing conversion to extended persistent homology, and methods to accommodate `igraph` and `network` objects and streamline the process.
+
+## Installation
+
+You can install the development version of **rgph** from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("tdaverse/rgph")
+```
+
+## Example
+
+```{r attach package}
+library(rgph)
+```
+
+The running example from [Tu &al (2019)](http://doi.org/10.1007/978-3-030-33720-9_8) can be read in from an installed data file:
+
+```{r read example}
+ex_file <- system.file("extdata/running_example.txt", package = "rgph")
+( ex_reeb <- read_reeb_graph(ex_file) )
+```
+
+While no `plot` method is provided yet, a layered layout from **igraph** is helpful:
+
+```{r plot example, fig.width=8, fig.height=8, out.width="60%"}
+ex_igraph <- as_igraph(ex_reeb, values = "height")
+ex_layout <- igraph::layout_with_sugiyama(
+  ex_igraph,
+  layers = igraph::vertex_attr(ex_igraph, "height")
+)
+plot(ex_igraph, layout = ex_layout)
+```
+
+Two methods, a generally slower multi-pass algorithm and a more intricate single-pass algorithm, are provided to pair critical points:
+
+```{r pair example}
+( ex_pairs <- reeb_graph_pairs(ex_reeb, method = "single") )
+```
+
+(Each end of a pairing is either a local extremum or a fork, as indicated by a bullet or an inequality, respectively.)
+
+This output can be converted to extended persistence diagrams using the **phutil** `persistence` class and plotted using the **TDA** method:
+
+```{r persist example, fig.width=5, fig.height=5, out.width="60%"}
+( ex_ph <- reeb_graph_persistence(ex_pairs, scale = "index") )
+TDA::plot.diagram(as.data.frame(ex_ph), asp = 1)
+```
