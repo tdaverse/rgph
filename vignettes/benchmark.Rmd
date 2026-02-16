@@ -127,7 +127,7 @@ for (i in seq_along(tree_reebs)) {
 
 By plotting all of the run times from each of the benchmarks, we can visualize both the differences in runtimes between the algorithms and the variability in those runtimes.
 
-```{r random (split) trees plot, fig.width=6}
+```{r random (split) trees plot, fig.width=8, fig.height=4, out.width="100%"}
 # plot runtime results
 tree_bench %>%
   select(size, method, time) %>%
