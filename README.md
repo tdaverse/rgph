@@ -9,14 +9,17 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-Reeb graphs arise as low-dimensional quotients of higher-dimensional
-topological spaces, with topological structure that is informative but
-quicker and easier to compute. **rgph** provides an S3 class and
-constructors for Reeb graphs, bindings to the
+Reeb graphs arise as low-dimensional quotients of topological spaces by
+level set–based equivalence. The Reeb graph’s topological structure is
+informative of that of the original space but quicker and easier to
+compute.
+
+**rgph** provides an S3 class and constructors for Reeb graphs, bindings
+to the
 [`ReebGraphPairing`](https://github.com/USFDataVisualization/ReebGraphPairing)
-Java library for pairing their critical points, post-processing
-conversion to extended persistent homology, and methods to accommodate
-`igraph` and `network` objects and streamline the process.
+Java library for pairing their critical points, post-processing to
+extended persistent homology, and methods to accommodate `igraph` and
+`network` objects and to streamline the process.
 
 ## Installation
 
@@ -28,6 +31,8 @@ You can install the development version of **rgph** from
 pak::pak("tdaverse/rgph")
 ```
 
+We expect to submit to CRAN soon!
+
 ## Example
 
 ``` r
@@ -36,12 +41,13 @@ library(rgph)
 #> Loading required package: phutil
 ```
 
-The running example from [Tu &al
+The running example from [Tu, Hajij, and Rosen
 (2019)](http://doi.org/10.1007/978-3-030-33720-9_8) can be read in from
 an installed data file:
 
 ``` r
-ex_file <- system.file("extdata/running_example.txt", package = "rgph")
+( ex_file <- system.file("extdata/running_example.txt", package = "rgph") )
+#> [1] "/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library/rgph/extdata/running_example.txt"
 ( ex_reeb <- read_reeb_graph(ex_file) )
 #> Reeb graph with 16 vertices and 18 edges on [0,15]:
 #>  1 ( 0) --  3 ( 2)
@@ -59,22 +65,37 @@ ex_file <- system.file("extdata/running_example.txt", package = "rgph")
 #> ...
 ```
 
-While no `plot` method is provided yet, a layered layout from **igraph**
-is helpful:
+The Reeb graph printout comprises the edgelist. In this example, the
+function value at each vertex is (up to numbering convention) the index
+of that vertex. The R indexing starts at 1, while the function values,
+printed in parentheses, reflect the original indexing from 0.
+
+While no `plot()` method is provided yet, a layered layout from
+[**igraph**](https://r.igraph.org/) may be helpful. Here we negate the
+values of the Reeb function so that vertices with higher (original)
+values are positioned higher in the plot:
 
 ``` r
-ex_igraph <- as_igraph(ex_reeb, values = "height")
+ex_igraph <- as_igraph(ex_reeb, values = "depth")
 ex_layout <- igraph::layout_with_sugiyama(
   ex_igraph,
-  layers = igraph::vertex_attr(ex_igraph, "height")
+  layers = -igraph::vertex_attr(ex_igraph, "depth")
 )
 plot(ex_igraph, layout = ex_layout)
 ```
 
 <img src="man/figures/README-plot example-1.png" alt="" width="60%" />
 
-Two methods, a generally slower multi-pass algorithm and a more
-intricate single-pass algorithm, are provided to pair critical points:
+While low-dimensional, Reeb graphs are intricate structures, whereas
+most statistical applications require numerical summary statistics. A
+meaningful topological signature of a Reeb graph (hence of its parent
+space) can be obtained by pairing its critical points.
+
+Tu, Hajij, and Rosen proposed a clever single-pass algorithm,
+“propagate-and-pair”, which outperformed a multiple-pass algorithm
+(based on standard procedures at the time) on most Reeb graphs included
+in a comparison. Both methods are provided, which the user may control
+using the `method` argument:
 
 ``` r
 ( ex_pairs <- reeb_graph_pairs(ex_reeb, method = "single") )
@@ -89,11 +110,15 @@ intricate single-pass algorithm, are provided to pair critical points:
 #> 14 (13) -< ... -• 15 (14)
 ```
 
-(Each end of a pairing is either a local extremum or a fork, as
-indicated by a bullet or an inequality, respectively.)
+Each end of a pairing is either a local extremum (minimum or maximum) or
+a fork (upward or downward). These types are indicated in the printout
+by bullets and inequality signs, respectively; refer to the plot above
+to see how the pairings exhaust the vertex–edge incidences.
 
-This output can be converted to extended persistence diagrams using the
-**phutil** `persistence` class and plotted using the **TDA** method:
+The pairing output can be converted to extended persistence diagrams
+using the `persistence` class from
+[**phutil**](https://tdaverse.github.io/phutil/) and plotted using the
+`diagram` method from [**TDA**](https://github.com/compTAG/r-tda):
 
 ``` r
 ( ex_ph <- reeb_graph_persistence(ex_pairs, scale = "index") )
@@ -106,3 +131,15 @@ TDA::plot.diagram(as.data.frame(ex_ph), asp = 1)
 ```
 
 <img src="man/figures/README-persist example-1.png" alt="" width="60%" />
+
+The plot overlays 4 sub-diagrams, explained in detail by [Carrière &
+Oudot (2018)](https://doi.org/10.1007/s10208-017-9370-z):
+
+- min–max pairs that encode connected components, constitutive of
+  degree-$0$ positive extended persistence (the pair $(1,16)$)
+- min–down pairs that encode merges; degree-$0$ ordinary persistence
+  (e.g. the pair $(5,7)$)
+- up–max pairs that encode splits; degree-$1$ relative persistence (the
+  pair $(14,15)$)
+- up–down pairs that encode cycles or fenestrations; degree-$1$ negative
+  extended persistence (e.g. the pair $(9,13)$)

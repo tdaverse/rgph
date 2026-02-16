@@ -1,0 +1,15 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/benchmark.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/as_reeb_graph.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/reeb_graph.html</loc></url>
+<url><loc>/reference/reeb_graph_examples.html</loc></url>
+<url><loc>/reference/reeb_graph_pairs.html</loc></url>
+<url><loc>/reference/reeb_graph_persistence.html</loc></url>
+<url><loc>/reference/rgph.html</loc></url>
+</urlset>
+
