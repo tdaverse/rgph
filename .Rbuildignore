@@ -10,7 +10,7 @@ java/.idea
 ^cran-comments.md$
 
 # website
-^_pkgdown.yaml$
+^_pkgdown.yml$
 ^docs$
 
 # custom
