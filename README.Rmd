@@ -37,13 +37,13 @@ We expect to submit to CRAN soon!
 
 ## Example
 
-```{r attach package}
+```{r attach-package}
 library(rgph)
 ```
 
 The running example from [Tu, Hajij, and Rosen (2019)](http://doi.org/10.1007/978-3-030-33720-9_8) can be read in from an installed data file:
 
-```{r read example}
+```{r read-example}
 ( ex_file <- system.file("extdata/running_example.txt", package = "rgph") )
 ( ex_reeb <- read_reeb_graph(ex_file) )
 ```
@@ -55,7 +55,7 @@ The R indexing starts at 1, while the function values, printed in parentheses, r
 While no `plot()` method is provided yet, a layered layout from [**igraph**](https://r.igraph.org/) may be helpful.
 Here we negate the values of the Reeb function so that vertices with higher (original) values are positioned higher in the plot:
 
-```{r plot example, fig.width=8, fig.height=8, out.width="60%"}
+```{r plot-example, fig.width=8, fig.height=8, out.width="60%"}
 ex_igraph <- as_igraph(ex_reeb, values = "depth")
 ex_layout <- igraph::layout_with_sugiyama(
   ex_igraph,
@@ -70,7 +70,7 @@ A meaningful topological signature of a Reeb graph (hence of its parent space) c
 Tu, Hajij, and Rosen proposed a clever single-pass algorithm, "propagate-and-pair", which outperformed a multiple-pass algorithm (based on standard procedures at the time) on most Reeb graphs included in a comparison.
 Both methods are provided, which the user may control using the `method` argument:
 
-```{r pair example}
+```{r pair-example}
 ( ex_pairs <- reeb_graph_pairs(ex_reeb, method = "single") )
 ```
 
@@ -79,7 +79,7 @@ These types are indicated in the printout by bullets and inequality signs, respe
 
 The pairing output can be converted to extended persistence diagrams using the `persistence` class from [**phutil**](https://tdaverse.github.io/phutil/) and plotted using the `diagram` method from [**TDA**](https://github.com/compTAG/r-tda):
 
-```{r persist example, fig.width=5, fig.height=5, out.width="60%"}
+```{r persist-example, fig.width=5, fig.height=5, out.width="60%"}
 ( ex_ph <- reeb_graph_persistence(ex_pairs, scale = "index") )
 TDA::plot.diagram(as.data.frame(ex_ph), asp = 1)
 ```

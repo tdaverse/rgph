@@ -47,7 +47,7 @@ an installed data file:
 
 ``` r
 ( ex_file <- system.file("extdata/running_example.txt", package = "rgph") )
-#> [1] "/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library/rgph/extdata/running_example.txt"
+#> [1] "/Library/Frameworks/R.framework/Versions/4.2/Resources/library/rgph/extdata/running_example.txt"
 ( ex_reeb <- read_reeb_graph(ex_file) )
 #> Reeb graph with 16 vertices and 18 edges on [0,15]:
 #>  1 ( 0) --  3 ( 2)
@@ -84,7 +84,7 @@ ex_layout <- igraph::layout_with_sugiyama(
 plot(ex_igraph, layout = ex_layout)
 ```
 
-<img src="man/figures/README-plot example-1.png" alt="" width="60%" />
+<img src="man/figures/README-plot-example-1.png" alt="" width="60%" />
 
 While low-dimensional, Reeb graphs are intricate structures, whereas
 most statistical applications require numerical summary statistics. A
@@ -100,14 +100,14 @@ using the `method` argument:
 ``` r
 ( ex_pairs <- reeb_graph_pairs(ex_reeb, method = "single") )
 #> Reeb graph critical pairing (8 pairs):
-#>  1 ( 0) •- ... -• 16 (15)
-#>  2 ( 1) •- ... >-  3 ( 2)
-#>  5 ( 4) •- ... >-  7 ( 6)
-#>  8 ( 7) •- ... >- 11 (10)
+#>  1 ( 0) -- ... -- 16 (15)
+#>  2 ( 1) -- ... >-  3 ( 2)
+#>  5 ( 4) -- ... >-  7 ( 6)
+#>  8 ( 7) -- ... >- 11 (10)
 #>  6 ( 5) -< ... >- 10 ( 9)
 #>  4 ( 3) -< ... >- 12 (11)
 #>  9 ( 8) -< ... >- 13 (12)
-#> 14 (13) -< ... -• 15 (14)
+#> 14 (13) -< ... -- 15 (14)
 ```
 
 Each end of a pairing is either a local extremum (minimum or maximum) or
@@ -130,7 +130,7 @@ using the `persistence` class from
 TDA::plot.diagram(as.data.frame(ex_ph), asp = 1)
 ```
 
-<img src="man/figures/README-persist example-1.png" alt="" width="60%" />
+<img src="man/figures/README-persist-example-1.png" alt="" width="60%" />
 
 The plot overlays 4 sub-diagrams, explained in detail by [Carrière &
 Oudot (2018)](https://doi.org/10.1007/s10208-017-9370-z):
