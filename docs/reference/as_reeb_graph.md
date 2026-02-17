@@ -79,9 +79,9 @@ library(igraph)
 #> 
 #>     union
 ( g <- make_kautz_graph(2, 1) )
-#> IGRAPH 74603ff D--- 6 12 -- Kautz graph 2-1
+#> IGRAPH 43542e1 D--- 6 12 -- Kautz graph 2-1
 #> + attr: name (g/c), m (g/n), n (g/n)
-#> + edges from 74603ff:
+#> + edges from 43542e1:
 #>  [1] 1->3 1->4 2->5 2->6 3->1 3->2 4->5 4->6 5->1 5->2 6->3 6->4
 l_g <- layout_with_fr(g)
 plot(g, layout = l_g)

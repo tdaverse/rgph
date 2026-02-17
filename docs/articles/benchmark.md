@@ -43,7 +43,7 @@ ex_reeb <- read_reeb_graph(ex_file)
 #>  9 ( 8) -< ... >- 13 (12)
 #> 14 (13) -< ... -• 15 (14)
 all.equal(ex_multi, ex_single)
-#> [1] "Attributes: < Component \"elapsed_time\": Mean relative difference: 0.6702068 >"
+#> [1] "Attributes: < Component \"elapsed_time\": Mean relative difference: 0.6666217 >"
 #> [2] "Attributes: < Component \"method\": 1 string mismatch >"
 ```
 
@@ -67,8 +67,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 multi         277µs    295µs     3198.    1.24KB     12.6
-#> 2 single        264µs    275µs     3503.    1.24KB     14.7
+#> 1 multi         278µs    295µs     3173.    1.24KB     12.6
+#> 2 single        255µs    276µs     3515.    1.24KB     14.7
 ```
 
 The R bindings are equivalent; while total runtimes will be higher than
@@ -125,8 +125,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 multi         4.7ms   4.89ms     198.     52.8KB     2.02
-#> 2 single       13.4ms  19.16ms      31.8    52.8KB     0
+#> 1 multi        4.75ms   4.97ms     196.     52.8KB     2.02
+#> 2 single       12.9ms  13.47ms      67.9    52.8KB     0
 ```
 
 For this Reeb graph, Propagate and Pair outperforms the multi-pass
@@ -203,7 +203,7 @@ tree_bench %>%
 #> # A tibble: 3 × 2
 #>    size ratio
 #>   <int> <dbl>
-#> 1    10 0.940
-#> 2   100 0.760
-#> 3  1000 0.668
+#> 1    10 0.937
+#> 2   100 0.748
+#> 3  1000 0.615
 ```

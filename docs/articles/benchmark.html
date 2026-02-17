@@ -109,7 +109,7 @@ running example from Tu &amp;al (2018):</p>
 <span><span class="co">#&gt;  9 ( 8) -&lt; ... &gt;- 13 (12)</span></span>
 <span><span class="co">#&gt; 14 (13) -&lt; ... -• 15 (14)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">ex_multi</span>, <span class="va">ex_single</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Attributes: &lt; Component \"elapsed_time\": Mean relative difference: 0.6702068 &gt;"</span></span>
+<span><span class="co">#&gt; [1] "Attributes: &lt; Component \"elapsed_time\": Mean relative difference: 0.6666217 &gt;"</span></span>
 <span><span class="co">#&gt; [2] "Attributes: &lt; Component \"method\": 1 string mismatch &gt;"</span></span></code></pre></div>
 <p>We expect the resulting data frames to be equivalent, but the output
 contains the attributes <code>method</code> and
@@ -129,8 +129,8 @@ run:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> multi         277µs    295µs     <span style="text-decoration: underline;">3</span>198.    1.24KB     12.6</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> single        264µs    275µs     <span style="text-decoration: underline;">3</span>503.    1.24KB     14.7</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> multi         278µs    295µs     <span style="text-decoration: underline;">3</span>173.    1.24KB     12.6</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> single        255µs    276µs     <span style="text-decoration: underline;">3</span>515.    1.24KB     14.7</span></span></code></pre></div>
 <p>The R bindings are equivalent; while total runtimes will be higher
 than when comparing the Java programs directly, the differences between
 them should be the same. Indeed, the allocated memory is exactly the
@@ -180,8 +180,8 @@ requirements, we manually drop these points first:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 6</span></span></span>
 <span><span class="co">#&gt;   expression      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;bch:expr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:tm&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;bch:byt&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> multi         4.7ms   4.89ms     198.     52.8KB     2.02</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> single       13.4ms  19.16ms      31.8    52.8KB     0</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> multi        4.75ms   4.97ms     196.     52.8KB     2.02</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> single       12.9ms  13.47ms      67.9    52.8KB     0</span></span></code></pre></div>
 <p>For this Reeb graph, Propagate and Pair outperforms the multi-pass
 algorithm by roughly a factor of 3.</p>
 </div>
@@ -249,9 +249,9 @@ medians quantifies this:</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">#&gt;    size ratio</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    10 0.940</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>   100 0.760</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  <span style="text-decoration: underline;">1</span>000 0.668</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>    10 0.937</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>   100 0.748</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>  <span style="text-decoration: underline;">1</span>000 0.615</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
