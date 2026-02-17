@@ -82,7 +82,7 @@
 <p>The running example from <a href="https://doi.org/10.1007/978-3-030-33720-9_8" class="external-link">Tu, Hajij, and Rosen (2019)</a> can be read in from an installed data file:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span> <span class="va">ex_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/running_example.txt"</span>, package <span class="op">=</span> <span class="st">"rgph"</span><span class="op">)</span> <span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "/Library/Frameworks/R.framework/Versions/4.2/Resources/library/rgph/extdata/running_example.txt"</span></span>
+<span><span class="co">#&gt; [1] "/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library/rgph/extdata/running_example.txt"</span></span>
 <span><span class="op">(</span> <span class="va">ex_reeb</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/reeb_graph.html">read_reeb_graph</a></span><span class="op">(</span><span class="va">ex_file</span><span class="op">)</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Reeb graph with 16 vertices and 18 edges on [0,15]:</span></span>
 <span><span class="co">#&gt;  1 ( 0) --  3 ( 2)</span></span>
@@ -113,14 +113,14 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span> <span class="va">ex_pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/reeb_graph_pairs.html">reeb_graph_pairs</a></span><span class="op">(</span><span class="va">ex_reeb</span>, method <span class="op">=</span> <span class="st">"single"</span><span class="op">)</span> <span class="op">)</span></span>
 <span><span class="co">#&gt; Reeb graph critical pairing (8 pairs):</span></span>
-<span><span class="co">#&gt;  1 ( 0) -- ... -- 16 (15)</span></span>
-<span><span class="co">#&gt;  2 ( 1) -- ... &gt;-  3 ( 2)</span></span>
-<span><span class="co">#&gt;  5 ( 4) -- ... &gt;-  7 ( 6)</span></span>
-<span><span class="co">#&gt;  8 ( 7) -- ... &gt;- 11 (10)</span></span>
+<span><span class="co">#&gt;  1 ( 0) •- ... -• 16 (15)</span></span>
+<span><span class="co">#&gt;  2 ( 1) •- ... &gt;-  3 ( 2)</span></span>
+<span><span class="co">#&gt;  5 ( 4) •- ... &gt;-  7 ( 6)</span></span>
+<span><span class="co">#&gt;  8 ( 7) •- ... &gt;- 11 (10)</span></span>
 <span><span class="co">#&gt;  6 ( 5) -&lt; ... &gt;- 10 ( 9)</span></span>
 <span><span class="co">#&gt;  4 ( 3) -&lt; ... &gt;- 12 (11)</span></span>
 <span><span class="co">#&gt;  9 ( 8) -&lt; ... &gt;- 13 (12)</span></span>
-<span><span class="co">#&gt; 14 (13) -&lt; ... -- 15 (14)</span></span></code></pre></div>
+<span><span class="co">#&gt; 14 (13) -&lt; ... -• 15 (14)</span></span></code></pre></div>
 <p>Each end of a pairing is either a local extremum (minimum or maximum) or a fork (upward or downward). These types are indicated in the printout by bullets and inequality signs, respectively; refer to the plot above to see how the pairings exhaust the vertex–edge incidences.</p>
 <p>The pairing output can be converted to extended persistence diagrams using the <code>persistence</code> class from <a href="https://tdaverse.github.io/phutil/" class="external-link"><strong>phutil</strong></a> and plotted using the <code>diagram</code> method from <a href="https://github.com/compTAG/r-tda" class="external-link"><strong>TDA</strong></a>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -132,12 +132,16 @@
 <span><span class="co">#&gt; ℹ With the following parameters: method = 'single_pass' and scale = 'index'.</span></span>
 <span><span class="fu">TDA</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TDA/man/plot.diagram.html" class="external-link">plot.diagram</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">ex_ph</span><span class="op">)</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-persist-example-1.png" alt="" width="60%"></p>
-<p>The plot overlays 4 sub-diagrams, explained in detail by <a href="https://doi.org/10.1007/s10208-017-9370-z" class="external-link">Carrière &amp; Oudot (2018)</a>:</p>
+<p>The plot overlays 4 sub-diagrams, two of which lie below the diagonal because they encode features in extended persistence whose births occur at larger function values than their deaths (explained in detail by <a href="https://doi.org/10.1007/s10208-017-9370-z" class="external-link">Carrière &amp; Oudot (2018)</a>):</p>
 <ul>
-<li>min–max pairs that encode connected components, constitutive of degree-<span class="math inline">\(0\)</span> positive extended persistence (the pair <span class="math inline">\((1,16)\)</span>)</li>
-<li>min–down pairs that encode merges; degree-<span class="math inline">\(0\)</span> ordinary persistence (e.g. the pair <span class="math inline">\((5,7)\)</span>)</li>
-<li>up–max pairs that encode splits; degree-<span class="math inline">\(1\)</span> relative persistence (the pair <span class="math inline">\((14,15)\)</span>)</li>
-<li>up–down pairs that encode cycles or fenestrations; degree-<span class="math inline">\(1\)</span> negative extended persistence (e.g. the pair <span class="math inline">\((9,13)\)</span>)</li>
+<li>min–max pairs that encode connected components, constitutive of degree-<span class="math inline">\(0\)</span> positive extended persistence; the pair <span class="math inline">\((1,16)\)</span>
+</li>
+<li>min–down pairs that encode merges, in degree-<span class="math inline">\(0\)</span> ordinary persistence; e.g. the pair <span class="math inline">\((5,7)\)</span>
+</li>
+<li>up–max pairs that encode splits, in degree-<span class="math inline">\(1\)</span> relative persistence; the pair <span class="math inline">\((15,14)\)</span>
+</li>
+<li>up–down pairs that encode cycles, in degree-<span class="math inline">\(1\)</span> negative extended persistence; e.g. the pair <span class="math inline">\((13,9)\)</span>
+</li>
 </ul>
 </div>
 </div>

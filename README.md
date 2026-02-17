@@ -47,7 +47,7 @@ an installed data file:
 
 ``` r
 ( ex_file <- system.file("extdata/running_example.txt", package = "rgph") )
-#> [1] "/Library/Frameworks/R.framework/Versions/4.2/Resources/library/rgph/extdata/running_example.txt"
+#> [1] "/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library/rgph/extdata/running_example.txt"
 ( ex_reeb <- read_reeb_graph(ex_file) )
 #> Reeb graph with 16 vertices and 18 edges on [0,15]:
 #>  1 ( 0) --  3 ( 2)
@@ -100,14 +100,14 @@ using the `method` argument:
 ``` r
 ( ex_pairs <- reeb_graph_pairs(ex_reeb, method = "single") )
 #> Reeb graph critical pairing (8 pairs):
-#>  1 ( 0) -- ... -- 16 (15)
-#>  2 ( 1) -- ... >-  3 ( 2)
-#>  5 ( 4) -- ... >-  7 ( 6)
-#>  8 ( 7) -- ... >- 11 (10)
+#>  1 ( 0) •- ... -• 16 (15)
+#>  2 ( 1) •- ... >-  3 ( 2)
+#>  5 ( 4) •- ... >-  7 ( 6)
+#>  8 ( 7) •- ... >- 11 (10)
 #>  6 ( 5) -< ... >- 10 ( 9)
 #>  4 ( 3) -< ... >- 12 (11)
 #>  9 ( 8) -< ... >- 13 (12)
-#> 14 (13) -< ... -- 15 (14)
+#> 14 (13) -< ... -• 15 (14)
 ```
 
 Each end of a pairing is either a local extremum (minimum or maximum) or
@@ -132,14 +132,16 @@ TDA::plot.diagram(as.data.frame(ex_ph), asp = 1)
 
 <img src="man/figures/README-persist-example-1.png" alt="" width="60%" />
 
-The plot overlays 4 sub-diagrams, explained in detail by [Carrière &
-Oudot (2018)](https://doi.org/10.1007/s10208-017-9370-z):
+The plot overlays 4 sub-diagrams, two of which lie below the diagonal
+because they encode features in extended persistence whose births occur
+at larger function values than their deaths (explained in detail by
+[Carrière & Oudot (2018)](https://doi.org/10.1007/s10208-017-9370-z)):
 
 - min–max pairs that encode connected components, constitutive of
-  degree-$0$ positive extended persistence (the pair $(1,16)$)
-- min–down pairs that encode merges; degree-$0$ ordinary persistence
-  (e.g. the pair $(5,7)$)
-- up–max pairs that encode splits; degree-$1$ relative persistence (the
-  pair $(14,15)$)
-- up–down pairs that encode cycles or fenestrations; degree-$1$ negative
-  extended persistence (e.g. the pair $(9,13)$)
+  degree-$0$ positive extended persistence; the pair $(1,16)$
+- min–down pairs that encode merges, in degree-$0$ ordinary persistence;
+  e.g. the pair $(5,7)$
+- up–max pairs that encode splits, in degree-$1$ relative persistence;
+  the pair $(15,14)$
+- up–down pairs that encode cycles, in degree-$1$ negative extended
+  persistence; e.g. the pair $(13,9)$
