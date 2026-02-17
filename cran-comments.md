@@ -1,6 +1,6 @@
 ## Checks
 
-* local OS X installs, R 4.2.3 and 4.5.1
+* local OS X installs, R 4.2.3  (java 25.0.1, rJava 1.0.6) and 4.5.1 (openjdk 23.0.2, rJava 1.0.11)
   * `devtools::check()`
   * `devtools::check(env_vars = c('_R_CHECK_DEPENDS_ONLY_' = "true"))`
   * `devtools::check(manual = TRUE, remote = TRUE)`
@@ -11,7 +11,7 @@
 
 ### R CMD check results
 
-On the local install with R 4.2.3 (Java 25.0.1, rJava 1.0.6), there was one (consistent) NOTE:
+All checks on both local installs yielded the following NOTE:
 
 ```
 ❯ checking for future file timestamps ... NOTE
@@ -26,8 +26,6 @@ Additionally, the third check obtained the following NOTE:
   
   New submission
 ```
-
-On the local install with R 4.5.1 (, rJava 1.0.11), there were no ERRORs, WARNINGs, or NOTEs.
 
 ### WinBuilder
 
