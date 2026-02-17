@@ -4,8 +4,14 @@
 
 # package
 java/.idea
-man-roxygen
-cran-comments.md
+^man-roxygen$
+^data-raw$
+^README\.Rmd$
+^cran-comments.md$
+
+# website
+^_pkgdown.yml$
+^docs$
 
 # custom
 sandbox

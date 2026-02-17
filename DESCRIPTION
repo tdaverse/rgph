@@ -42,7 +42,7 @@ Description: Interface to the `ReebGraphPairing` program to compute critical
     and post-process pairing data to obtain extended persistent homology
     following Carrière & Oudot (2018) <doi:10.1007/s10208-017-9370-z>.
 Depends:
-    R (>= 2.7.0),
+    R (>= 3.5.0),
     rJava (>= 0.5-0),
     phutil
 Suggests:
@@ -51,7 +51,12 @@ Suggests:
     network (>= 1.19.0),
     tinytest,
     knitr,
-    rmarkdown
+    rmarkdown,
+    dplyr,
+    tidyr,
+    scales,
+    ggplot2,
+    bench
 SystemRequirements: Java (>= 5.0)
 License: GPL-3
 Packaged: 2014-09-04 13:17:36 UTC; tverbeke

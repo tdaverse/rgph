@@ -1,0 +1,26 @@
+template:
+  bootstrap: 5
+  math-rendering: mathjax
+
+reference:
+- title: "'rgph' package"
+  desc: Compute critical point pairings and persistent homology for Reeb graphs
+  contents:
+  - '`rgph`'
+- title: "Data sets"
+  desc: Example Reeb graphs used to illustrate package tools
+  contents:
+  - '`david`'
+  - '`buddha`'
+  - '`topology`'
+  - '`flower`'
+- title: "Class and coercers"
+  desc: An S3 class for Reeb graphs and converters with other graph classes
+  contents:
+  - '`reeb_graph`'
+  - '`as_reeb_graph`'
+- title: "Statistical summaries"
+  desc: Critical point pairings and persistent homology
+  contents:
+  - '`reeb_graph_pairs`'
+  - '`reeb_graph_persistence`'

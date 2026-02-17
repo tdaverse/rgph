@@ -131,13 +131,15 @@ read_reeb_graph <- function(file) {
   order_indices <- order(indices)
   values <- as.numeric(gsub("^v [0-9]+ ([0-9\\.]+)$", "\\1", values))
   values <- values[order_indices]
+  indices <- indices[order_indices]
 
   edgelist <- lines[grepl("^e ", lines)]
   fromlist <- as.integer(gsub("^e ([0-9]+) [0-9]+$", "\\1", edgelist))
   tolist <- as.integer(gsub("^e [0-9]+ ([0-9]+)$", "\\1", edgelist))
   edgelist <- unname(cbind(fromlist, tolist))
-  # index from 1 in R
-  edgelist <- edgelist + 1L
+
+  # make indices consecutive & start at 1
+  edgelist[] <- match(edgelist, indices)
 
   reeb_graph(values = values, edgelist = edgelist)
 }
