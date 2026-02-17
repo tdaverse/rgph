@@ -42,7 +42,7 @@ library(rgph)
 ```
 
 The running example from [Tu, Hajij, and Rosen
-(2019)](http://doi.org/10.1007/978-3-030-33720-9_8) can be read in from
+(2019)](https://doi.org/10.1007/978-3-030-33720-9_8) can be read in from
 an installed data file:
 
 ``` r
@@ -84,7 +84,7 @@ ex_layout <- igraph::layout_with_sugiyama(
 plot(ex_igraph, layout = ex_layout)
 ```
 
-<img src="man/figures/README-plot example-1.png" alt="" width="60%" />
+<img src="man/figures/README-plot-example-1.png" alt="" width="60%" />
 
 While low-dimensional, Reeb graphs are intricate structures, whereas
 most statistical applications require numerical summary statistics. A
@@ -130,16 +130,18 @@ using the `persistence` class from
 TDA::plot.diagram(as.data.frame(ex_ph), asp = 1)
 ```
 
-<img src="man/figures/README-persist example-1.png" alt="" width="60%" />
+<img src="man/figures/README-persist-example-1.png" alt="" width="60%" />
 
-The plot overlays 4 sub-diagrams, explained in detail by [Carrière &
-Oudot (2018)](https://doi.org/10.1007/s10208-017-9370-z):
+The plot overlays 4 sub-diagrams, two of which lie below the diagonal
+because they encode features in extended persistence whose births occur
+at larger function values than their deaths (explained in detail by
+[Carrière & Oudot (2018)](https://doi.org/10.1007/s10208-017-9370-z)):
 
 - min–max pairs that encode connected components, constitutive of
-  degree-$0$ positive extended persistence (the pair $(1,16)$)
-- min–down pairs that encode merges; degree-$0$ ordinary persistence
-  (e.g. the pair $(5,7)$)
-- up–max pairs that encode splits; degree-$1$ relative persistence (the
-  pair $(14,15)$)
-- up–down pairs that encode cycles or fenestrations; degree-$1$ negative
-  extended persistence (e.g. the pair $(9,13)$)
+  degree-$0$ positive extended persistence; the pair $(1,16)$
+- min–down pairs that encode merges, in degree-$0$ ordinary persistence;
+  e.g. the pair $(5,7)$
+- up–max pairs that encode splits, in degree-$1$ relative persistence;
+  the pair $(15,14)$
+- up–down pairs that encode cycles, in degree-$1$ negative extended
+  persistence; e.g. the pair $(13,9)$

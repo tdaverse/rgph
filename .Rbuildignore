@@ -9,6 +9,10 @@ java/.idea
 ^README\.Rmd$
 ^cran-comments.md$
 
+# website
+^_pkgdown.yml$
+^docs$
+
 # custom
 sandbox
 ignore
