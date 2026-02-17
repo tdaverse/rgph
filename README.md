@@ -42,7 +42,7 @@ library(rgph)
 ```
 
 The running example from [Tu, Hajij, and Rosen
-(2019)](http://doi.org/10.1007/978-3-030-33720-9_8) can be read in from
+(2019)](https://doi.org/10.1007/978-3-030-33720-9_8) can be read in from
 an installed data file:
 
 ``` r
