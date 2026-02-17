@@ -38,11 +38,19 @@
 #' phutil::get_pairs(t10_ph, dimension = 0)
 #'
 #' @export
-reeb_graph_persistence <- function(x, ...) UseMethod("reeb_graph_persistence")
+reeb_graph_persistence <- function(
+    x,
+    scale = c("value", "index", "order"),
+    ...
+) UseMethod("reeb_graph_persistence")
 
 #' @rdname reeb_graph_persistence
 #' @export
-reeb_graph_persistence.default <- function(x, ...) {
+reeb_graph_persistence.default <- function(
+    x,
+    scale = c("value", "index", "order"),
+    ...
+) {
   stop(paste0(
     "No `reeb_graph_persistence()` method for class(es) '",
     paste(class(x), collapse = "', '"),
@@ -52,17 +60,17 @@ reeb_graph_persistence.default <- function(x, ...) {
 
 reeb_graph_persistence_graph <- function(
     x,
-    values = NULL,
+    scale = c("value", "index", "order"),
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
-    scale = c("value", "index", "order"),
+    values = NULL,
     ...
 ) {
   x <- as_reeb_graph(x, values = values)
 
   reeb_graph_persistence.reeb_graph(
     x,
-    sublevel = sublevel, method = method, scale = scale
+    scale = scale, sublevel = sublevel, method = method
   )
 }
 
@@ -78,9 +86,9 @@ reeb_graph_persistence.network <- reeb_graph_persistence_graph
 #' @export
 reeb_graph_persistence.reeb_graph <- function(
     x,
+    scale = c("value", "index", "order"),
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
-    scale = c("value", "index", "order"),
     ...
 ) {
   # pair critical points

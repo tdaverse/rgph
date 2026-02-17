@@ -11,23 +11,33 @@
 \alias{format.reeb_graph_pairs}
 \title{Pair Reeb Graph Critical Points via Java}
 \usage{
-reeb_graph_pairs(x, ...)
-
-\method{reeb_graph_pairs}{default}(x, ...)
-
-\method{reeb_graph_pairs}{igraph}(
+reeb_graph_pairs(
   x,
-  values = NULL,
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
   ...
 )
 
-\method{reeb_graph_pairs}{network}(
+\method{reeb_graph_pairs}{default}(
   x,
-  values = NULL,
   sublevel = TRUE,
   method = c("single_pass", "multi_pass"),
+  ...
+)
+
+\method{reeb_graph_pairs}{igraph}(
+  x,
+  sublevel = TRUE,
+  method = c("single_pass", "multi_pass"),
+  values = NULL,
+  ...
+)
+
+\method{reeb_graph_pairs}{network}(
+  x,
+  sublevel = TRUE,
+  method = c("single_pass", "multi_pass"),
+  values = NULL,
   ...
 )
 
@@ -47,6 +57,13 @@ reeb_graph_pairs(x, ...)
 \arguments{
 \item{x}{A \code{\link{reeb_graph}} object.}
 
+\item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
+the default) or else the superlevel set filtration (via reversing
+\code{x[["values"]]} before paring critical points.}
+
+\item{method}{Character; the pairing method to use. Matched to
+\code{"single_pass"} (the default) or \code{"multi_pass"}.}
+
 \item{...}{Additional arguments passed to methods.}
 
 \item{values}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
@@ -54,13 +71,6 @@ node attribute to use as the Reeb graph value function. If \code{NULL} (the
 default), the first numeric node attribute is used. For coercion \emph{from}
 class \code{reeb_graph}, a character value; the name of the node attribute in
 which to store the Reeb graph value function.}
-
-\item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
-the default) or else the superlevel set filtration (via reversing
-\code{x[["values"]]} before paring critical points.}
-
-\item{method}{Character; the pairing method to use. Matched to
-\code{"single_pass"} (the default) or \code{"multi_pass"}.}
 
 \item{n}{Integer number of critical pairs to print.}
 

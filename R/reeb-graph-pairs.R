@@ -96,11 +96,21 @@
 #' @template ref-tu2019
 #' @template ref-carriere2018
 #' @export
-reeb_graph_pairs <- function(x, ...) UseMethod("reeb_graph_pairs")
+reeb_graph_pairs <- function(
+    x,
+    sublevel = TRUE,
+    method = c("single_pass", "multi_pass"),
+    ...
+) UseMethod("reeb_graph_pairs")
 
 #' @rdname reeb_graph_pairs
 #' @export
-reeb_graph_pairs.default <- function(x, ...) {
+reeb_graph_pairs.default <- function(
+    x,
+    sublevel = TRUE,
+    method = c("single_pass", "multi_pass"),
+    ...
+) {
   stop(paste0(
     "No `reeb_graph_pairs()` method for class(es) '",
     paste(class(x), collapse = "', '"),
@@ -110,9 +120,9 @@ reeb_graph_pairs.default <- function(x, ...) {
 
 reeb_graph_pairs_graph <- function(
     x,
-    values = NULL,
     sublevel = TRUE,
     method = c("single_pass", "multi_pass"),
+    values = NULL,
     ...
 ) {
   x <- as_reeb_graph(x, values = values)
@@ -147,6 +157,9 @@ reeb_graph_pairs.reeb_graph <- function(
   # dynamically decide which pairing method to use based on the method
   method <- match.arg(tolower(method), c("single_pass", "multi_pass"))
 
+  # remove isolated vertices
+  x <- drop_reeb_graph_points(x)
+
   # converting R vectors into the required format for Java
   vertex_indices_java <- .jarray(seq(0L, length(x[["values"]]) - 1L))
   # REVIEW: Are floats in Java as precise as doubles in R?
@@ -159,14 +172,14 @@ reeb_graph_pairs.reeb_graph <- function(
   # the name of the Java class we need to instantiate for the pairing method
   pairing_java_object <- switch(
     method,
-    single_pass = paste("usf.saav.cmd.", "MergePairingCLI", sep = ""),
-    multi_pass = paste("usf.saav.cmd.", "PPPairingCLI", sep = "")
+    multi_pass = paste("usf.saav.cmd.", "MergePairingCLI", sep = ""),
+    single_pass = paste("usf.saav.cmd.", "PPPairingCLI", sep = "")
   )
   # the Java project file path of the corresponding pairing type
   java_file_path <- switch(
     method,
-    single_pass = paste("usf/saav/cmd/", "MergePairingCLI", sep=""),
-    multi_pass = paste("usf/saav/cmd/", "PPPairingCLI", sep="")
+    multi_pass = paste("usf/saav/cmd/", "MergePairingCLI", sep=""),
+    single_pass = paste("usf/saav/cmd/", "PPPairingCLI", sep="")
   )
 
   jhw <- .jnew(pairing_java_object)
@@ -229,6 +242,17 @@ as.data.frame.reeb_graph_pairs <- function(x, ...) {
   df
 }
 
+drop_reeb_graph_points <- function(x) {
+  incidents <- sort(unique(as.vector(x$edgelist)))
+  n_isolates <- length(x$values) - length(incidents)
+  if (n_isolates > 0L) {
+    x$values <- x$values[incidents]
+    x$edgelist[] <- match(x$edgelist, incidents)
+    message("Note: ", n_isolates, " isolated vertices were dropped.")
+  }
+  x
+}
+
 check_reeb_graph_pairs <- function(x) {
   stopifnot(
     length(x) == 4L,
@@ -287,7 +311,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
   pair_fmt <- matrix(paste0(
     # high type
     c(
-      LEAF_MIN = "", UPFORK = "", LEAF_MAX = "-- ", DOWNFORK = ">- "
+      LEAF_MIN = "", UPFORK = "", LEAF_MAX = "-\u2022 ", DOWNFORK = ">- "
     )[x[["type"]][seq(n), ]],
     # node info
     pair_ind,
@@ -295,7 +319,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
     " (", pair_val, ")",
     # low type
     c(
-      LEAF_MIN = " --", UPFORK = " -<", LEAF_MAX = "", DOWNFORK = ""
+      LEAF_MIN = " \u2022-", UPFORK = " -<", LEAF_MAX = "", DOWNFORK = ""
     )[x[["type"]][seq(n), ]]
   ), ncol = 2L)
   pair_fmt <- apply(pair_fmt, 1L, paste, collapse = " ... ")
