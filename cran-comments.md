@@ -11,11 +11,20 @@
 
 ### R CMD check results
 
-On the local install with R 4.2.3 (Java , rJava ), there was only one (consistent) NOTE:
+On the local install with R 4.2.3 (Java 25.0.1, rJava 1.0.6), there was one (consistent) NOTE:
 
 ```
 ❯ checking for future file timestamps ... NOTE
   unable to verify current time
+```
+
+Additionally, the third check obtained the following NOTE:
+
+```
+❯ checking CRAN incoming feasibility ... NOTE
+  Maintainer: ‘Jason Cory Brunson <cornelioid@gmail.com>’
+  
+  New submission
 ```
 
 On the local install with R 4.5.1 (, rJava 1.0.11), there were no ERRORs, WARNINGs, or NOTEs.
