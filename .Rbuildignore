@@ -6,9 +6,12 @@
 java/.idea
 ^man-roxygen$
 ^data-raw$
-^docs$
 ^README\.Rmd$
 ^cran-comments.md$
+
+# website
+^_pkgdown.yaml$
+^docs$
 
 # custom
 sandbox
