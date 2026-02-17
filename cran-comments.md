@@ -31,7 +31,7 @@ Additionally, the third check obtained the following NOTE:
 
 There were no ERRORs or WARNINGs.
 
-There was consistently 1 NOTE, about several possibly misspelled words, though these are in fact spelled correctly:
+All checks resulted in 1 NOTE, about several possibly misspelled words, though these are in fact spelled correctly:
 "Hajij", "Oudot", "Reeb", "ReebGraphPairing", "Rosen", and "rJava".
 
 ## Downstream dependencies
