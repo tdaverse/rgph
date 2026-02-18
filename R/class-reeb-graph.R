@@ -137,8 +137,6 @@ read_reeb_graph <- function(file) {
   fromlist <- as.integer(gsub("^e ([0-9]+) [0-9]+$", "\\1", edgelist))
   tolist <- as.integer(gsub("^e [0-9]+ ([0-9]+)$", "\\1", edgelist))
   edgelist <- unname(cbind(fromlist, tolist))
-
-  # make indices consecutive & start at 1
   edgelist[] <- match(edgelist, indices)
 
   reeb_graph(values = values, edgelist = edgelist)
