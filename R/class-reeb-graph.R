@@ -128,6 +128,8 @@ read_reeb_graph <- function(file) {
 
   values <- lines[grepl("^v ", lines)]
   indices <- as.integer(gsub("^v ([0-9]+) [0-9\\.]+$", "\\1", values))
+  if (any(duplicated(indices)))
+    stop("File '", basename(file), "' has duplicate vertex indices.")
   order_indices <- order(indices)
   values <- as.numeric(gsub("^v [0-9]+ ([0-9\\.]+)$", "\\1", values))
   values <- values[order_indices]
