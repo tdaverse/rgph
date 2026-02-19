@@ -9,6 +9,6 @@ nm <- vapply(f, \(s) sub("^data-raw/([^_]*)_.*.txt$", "\\1", s), "")
 for (i in seq_along(rg)) {
   assign(nm[[i]], rg[[i]])
   rd <- paste0("data/", nm[[i]], ".rda")
-  save(list = nm[[i]], file = rd)
+  save(list = nm[[i]], file = rd, version = 2)
   print(rd)
 }
