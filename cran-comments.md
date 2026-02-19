@@ -27,6 +27,8 @@ Additionally, the third check obtained the following NOTE:
   New submission
 ```
 
+No other NOTEs arose.
+
 ### WinBuilder
 
 There were no ERRORs or WARNINGs.
