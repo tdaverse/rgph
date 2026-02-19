@@ -34,9 +34,9 @@ Authors@R: c(
                   ORCID = "0000-0001-7026-7454")
     )
   )
-Description: Interface to the `ReebGraphPairing` program to compute critical
+Description: Interface to the 'ReebGraphPairing' program to compute critical
     points of Reeb graphs following Tu, Hajij, & Rosen (2019)
-    <doi:10.1007/978-3-030-33720-9_8> via the rJava package.
+    <doi:10.1007/978-3-030-33720-9_8> via the 'rJava' package.
     Also store Reeb graphs in a minimal S3 class,
     convert between other network data structures,
     and post-process pairing data to obtain extended persistent homology
