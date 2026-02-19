@@ -6,7 +6,7 @@
 \alias{rgph}
 \title{rgph: Pair Critical Points and Compute Persistent Homology of Reeb Graphs}
 \description{
-Interface to the `ReebGraphPairing` program to compute critical points of Reeb graphs following Tu, Hajij, & Rosen (2019) \doi{10.1007/978-3-030-33720-9_8} via the rJava package. Also store Reeb graphs in a minimal S3 class, convert between other network data structures, and post-process pairing data to obtain extended persistent homology following Carrière & Oudot (2018) \doi{10.1007/s10208-017-9370-z}.
+Interface to the 'ReebGraphPairing' program to compute critical points of Reeb graphs following Tu, Hajij, & Rosen (2019) \doi{10.1007/978-3-030-33720-9_8} via the 'rJava' package. Also store Reeb graphs in a minimal S3 class, convert between other network data structures, and post-process pairing data to obtain extended persistent homology following Carrière & Oudot (2018) \doi{10.1007/s10208-017-9370-z}.
 }
 \author{
 \strong{Maintainer}: Jason Cory Brunson \email{cornelioid@gmail.com} (\href{https://orcid.org/0000-0003-3126-9494}{ORCID})
