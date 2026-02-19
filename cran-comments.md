@@ -33,8 +33,8 @@ No other NOTEs arose.
 
 There were no ERRORs or WARNINGs.
 
-All checks resulted in 1 NOTE, about several possibly misspelled words, though these are in fact spelled correctly:
-"Hajij", "Oudot", "Reeb", "ReebGraphPairing", "Rosen", and "rJava".
+All checks resulted in 1 NOTE, about several possibly misspelled words; all are correctly-spelled surnames:
+"Hajij", "Oudot", "Reeb", and "Rosen".
 
 ## Downstream dependencies
 
