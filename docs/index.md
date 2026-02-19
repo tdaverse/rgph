@@ -38,7 +38,7 @@ an installed data file:
 
 ``` r
 ( ex_file <- system.file("extdata/running_example.txt", package = "rgph") )
-#> [1] "/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library/rgph/extdata/running_example.txt"
+#> [1] "/Library/Frameworks/R.framework/Versions/4.2/Resources/library/rgph/extdata/running_example.txt"
 ( ex_reeb <- read_reeb_graph(ex_file) )
 #> Reeb graph with 16 vertices and 18 edges on [0,15]:
 #>  1 ( 0) --  3 ( 2)
@@ -127,7 +127,8 @@ TDA::plot.diagram(as.data.frame(ex_ph), asp = 1)
 The plot overlays 4 sub-diagrams, two of which lie below the diagonal
 because they encode features in extended persistence whose births occur
 at larger function values than their deaths (explained in detail by
-[Carrière & Oudot (2018)](https://doi.org/10.1007/s10208-017-9370-z)):
+[Carrière & Oudot (2018)](https://doi.org/10.1007/s10208-017-9370-z);
+compare to Fig. 1 of Tu, Hajij, and Rosen):
 
 - min–max pairs that encode connected components, constitutive of
   degree-\\(0\\) positive extended persistence; the pair \\((1,16)\\)

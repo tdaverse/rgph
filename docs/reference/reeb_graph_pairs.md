@@ -203,7 +203,7 @@ ex_sf <- system.file("extdata", "running_example.txt", package = "rgph")
 attr(ex_cp, "method")
 #> [1] "single_pass"
 attr(ex_cp, "elapsed_time")
-#> [1] 0.0933375
+#> [1] 0.1093791
 
 reeb_graph_pairs(ex_rg, sublevel = FALSE)
 #> Reeb graph critical pairing (8 pairs):

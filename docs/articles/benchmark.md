@@ -43,7 +43,7 @@ ex_reeb <- read_reeb_graph(ex_file)
 #>  9 ( 8) -< ... >- 13 (12)
 #> 14 (13) -< ... -• 15 (14)
 all.equal(ex_multi, ex_single)
-#> [1] "Attributes: < Component \"elapsed_time\": Mean relative difference: 0.689427 >"
+#> [1] "Attributes: < Component \"elapsed_time\": Mean relative difference: 0.6552826 >"
 #> [2] "Attributes: < Component \"method\": 1 string mismatch >"
 ```
 
@@ -67,8 +67,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 multi         279µs    297µs     3176.    1.24KB     12.6
-#> 2 single        257µs    278µs     3494.    1.24KB     14.7
+#> 1 multi         285µs    372µs     2276.    1.24KB     8.34
+#> 2 single        265µs    290µs     3180.    1.24KB    14.8
 ```
 
 The R bindings are equivalent; while total runtimes will be higher than
@@ -88,11 +88,11 @@ computationally intensive settings.
 ``` r
 # print only a few edges for illustration
 print(flower, n = 4)
-#> Reeb graph with 325 vertices and 388 edges on [0,10]:
-#>  65 (0.000000) -- 283 (1.237770)
-#> 283 (1.237770) --  73 (2.475540)
-#>  73 (2.475540) -- 240 (3.026665)
-#> 240 (3.026665) --  64 (3.577791)
+#> Reeb graph with 132 vertices and 196 edges on [0,10]:
+#> 123 (0.000000) --  24 (2.472221)
+#>  24 (2.472221) --  21 (3.478179)
+#>  24 (2.472221) --  21 (3.478179)
+#>  21 (3.478179) --  40 (3.572073)
 #> ...
 ```
 
@@ -103,12 +103,11 @@ calculation, lest they seize up the algorithms:
 ``` r
 # print only a few pairs for illustration
 print(reeb_graph_pairs(flower, method = "multi_pass"), n = 4)
-#> Note: 87 isolated vertices were dropped.
-#> Reeb graph critical pairing (200 pairs):
-#>  65 (0.000000) •- ... -• 66 (10.000000)
-#>  73 (2.475540) -< ... >- 64 ( 3.577791)
-#> 188 (3.776078) -< ... >- 48 ( 3.824975)
-#> 144 (3.812326) -< ... >- 94 ( 3.872892)
+#> Reeb graph critical pairing (66 pairs):
+#> 123 (0.000000) •- ... -• 22 (10.000000)
+#>  24 (2.472221) -< ... >- 21 ( 3.478179)
+#>  40 (3.572073) -< ... >- 43 ( 3.690718)
+#> 120 (3.626757) -< ... >- 78 ( 3.753133)
 ```
 
 So that the benchmark results are more reflective of the algorithms’
@@ -116,7 +115,6 @@ requirements, we manually drop these points first:
 
 ``` r
 flower <- rgph:::drop_reeb_graph_points(flower)
-#> Note: 87 isolated vertices were dropped.
 bench::mark(
   multi = reeb_graph_pairs(flower, method = "multi_pass"),
   single = reeb_graph_pairs(flower, method = "single_pass"),
@@ -125,8 +123,8 @@ bench::mark(
 #> # A tibble: 2 × 6
 #>   expression      min   median `itr/sec` mem_alloc `gc/sec`
 #>   <bch:expr> <bch:tm> <bch:tm>     <dbl> <bch:byt>    <dbl>
-#> 1 multi        4.68ms   4.97ms     197.     52.8KB     2.03
-#> 2 single      13.76ms  14.06ms      63.5    52.8KB     0
+#> 1 multi         596µs    634µs     1543.      24KB     6.16
+#> 2 single        519µs    617µs     1512.      24KB     8.38
 ```
 
 For this Reeb graph, Propagate and Pair outperforms the multi-pass
@@ -203,7 +201,7 @@ tree_bench %>%
 #> # A tibble: 3 × 2
 #>    size ratio
 #>   <int> <dbl>
-#> 1    10 0.930
-#> 2   100 0.751
-#> 3  1000 0.656
+#> 1    10 0.974
+#> 2   100 0.776
+#> 3  1000 0.587
 ```

@@ -1,9 +1,9 @@
 # rgph: Pair Critical Points and Compute Persistent Homology of Reeb Graphs
 
-Interface to the \`ReebGraphPairing\` program to compute critical points
+Interface to the 'ReebGraphPairing' program to compute critical points
 of Reeb graphs following Tu, Hajij, & Rosen (2019)
 [doi:10.1007/978-3-030-33720-9_8](https://doi.org/10.1007/978-3-030-33720-9_8)
-via the rJava package. Also store Reeb graphs in a minimal S3 class,
+via the 'rJava' package. Also store Reeb graphs in a minimal S3 class,
 convert between other network data structures, and post-process pairing
 data to obtain extended persistent homology following Carrière & Oudot
 (2018)
