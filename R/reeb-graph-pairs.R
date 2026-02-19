@@ -36,7 +36,7 @@
 #' @param n Integer number of critical pairs to print.
 #' @param minlength Minimum name abbreviation length; passed to
 #'   [base::abbreviate()].
-#' @return A list of subclass [reeb_graph_pairs] containing 4 2-column matrices
+#' @returns A list of subclass [reeb_graph_pairs] containing 4 2-column matrices
 #'   characterizing the low- and high-valued critical points of each pair:
 #'   \describe{
 #'     \item{`type`}{

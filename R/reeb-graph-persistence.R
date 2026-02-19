@@ -19,7 +19,7 @@
 #' @inheritParams reeb_graph_pairs
 #' @param scale Character; the scale parameter used by the persistent pairs.
 #'   Matched to `"value"` (the default), `"index"`, or `"order"`.
-#' @return A [phutil::persistence] object.
+#' @returns A [phutil::persistence] object.
 #' @seealso [reeb_graph_pairs()]
 #' @examples
 #' ex_sf <- system.file("extdata", "running_example.txt", package = "rgph")
