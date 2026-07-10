@@ -172,14 +172,14 @@ reeb_graph_pairs.reeb_graph <- function(
   # the name of the Java class we need to instantiate for the pairing method
   pairing_java_object <- switch(
     method,
-    multi_pass = paste("usf.saav.cmd.", "MergePairingCLI", sep = ""),
-    single_pass = paste("usf.saav.cmd.", "PPPairingCLI", sep = "")
+    multi_pass = "usf.saav.cmd.MergePairingCLI",
+    single_pass = "usf.saav.cmd.PPPairingCLI"
   )
-  # the Java project file path of the corresponding pairing type
+  # the Java class path of the corresponding pairing type (for static calls)
   java_file_path <- switch(
     method,
-    multi_pass = paste("usf/saav/cmd/", "MergePairingCLI", sep=""),
-    single_pass = paste("usf/saav/cmd/", "PPPairingCLI", sep="")
+    multi_pass = "usf/saav/cmd/MergePairingCLI",
+    single_pass = "usf/saav/cmd/PPPairingCLI"
   )
 
   jhw <- .jnew(pairing_java_object)
@@ -197,8 +197,8 @@ reeb_graph_pairs.reeb_graph <- function(
   vType <- .jcall(java_file_path, "[S", "getVTypes")
   pRealValues <- .jcall(java_file_path, "[F", "getPRealValues")
   vRealValues <- .jcall(java_file_path, "[F", "getVRealValues")
-  pValues <- .jcall(java_file_path, "[F", "getPValues") + 1L
-  vValues <- .jcall(java_file_path, "[F", "getVValues") + 1L
+  pValues <- as.integer(round(.jcall(java_file_path, "[F", "getPValues"))) + 1L
+  vValues <- as.integer(round(.jcall(java_file_path, "[F", "getVValues"))) + 1L
   pGlobalIDs <- .jcall(java_file_path, "[I", "getPGlobalIDs") + 1L
   vGlobalIDs <- .jcall(java_file_path, "[I", "getVGlobalIDs") + 1L
   elapsedTime <- .jcall(java_file_path, "D", "getElapsedTime")
@@ -258,7 +258,7 @@ check_reeb_graph_pairs <- function(x) {
     length(x) == 4L,
     all(names(x) == c("type", "value", "index", "order")),
     length(unique(vapply(x, nrow, 0L))) == 1L,
-    all(unique(t(sapply(x, colnames))) == c("lo", "hi")),
+    identical(colnames(x[["type"]]), c("lo", "hi")),
     all(x[["type"]] %in% c("LEAF_MIN", "DOWNFORK", "LEAF_MAX", "UPFORK")),
     is.numeric(x[["value"]]),
     is.integer(x[["index"]]),

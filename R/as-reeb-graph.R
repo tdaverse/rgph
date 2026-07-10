@@ -62,9 +62,6 @@ as_reeb_graph.igraph <- function(x, values = NULL, names = NULL, ...) {
     values <- igraph::vertex_attr(x, values)
   }
 
-  if (! is.null(names))
-    names(values) <- igraph::vertex_attr(x, names)
-
   if (! is.null(names)) {
     if (names %in% igraph::vertex_attr_names(x)) {
       names(values) <- igraph::vertex_attr(x, names)
