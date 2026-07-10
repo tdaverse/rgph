@@ -89,10 +89,14 @@ public class MergePairingCLI {
         }
     }
 
+    // This method is called from R via rJava.  Its signature declares
+    // throws Exception so that any failure (bad input, algorithm error,
+    // etc.) propagates as an rJava / R error rather than being silently
+    // swallowed.  The R side does not need to check for stale results.
     public static void mainR(int[] vertexIds,
                                     float[] vertexWeights,
                                     int[] edgeOriginIds,
-                                    int[] edgeDestinationIds) {
+                                    int[] edgeDestinationIds) throws Exception {
         // Clear static result fields before attempting computation.
         // If an exception occurs below, stale data from a prior call
         // must not leak into the results retrieved by the R side.
@@ -108,29 +112,25 @@ public class MergePairingCLI {
         finalGraph = null;
         elapsedTime = 0;
 
-        try {
-            PairingResult result = TestResults.runAlgo(vertexIds,
-                    vertexWeights,
-                    edgeOriginIds,
-                    edgeDestinationIds,
-                    new MergePairing(),
-                    new TimerNanosecond(),
-                    false);
-            rg = result.getReebGraphArrayList();
-            elapsedTime = result.getElapsedTime();
+        PairingResult result = TestResults.runAlgo(vertexIds,
+                vertexWeights,
+                edgeOriginIds,
+                edgeDestinationIds,
+                new MergePairing(),
+                new TimerNanosecond(),
+                false);
+        rg = result.getReebGraphArrayList();
+        elapsedTime = result.getElapsedTime();
 
-            ResultList resultList = TestResults.getResultList(rg);
-            pTypes = resultList.pTypes;
-            vTypes = resultList.vTypes;
-            pValues = resultList.pValues;
-            vValues = resultList.vValues;
-            pRealValues = resultList.pRealValues;
-            vRealValues = resultList.vRealValues;
-            pGlobalIDs = resultList.pGlobalIDs;
-            vGlobalIDs = resultList.vGlobalIDs;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ResultList resultList = TestResults.getResultList(rg);
+        pTypes = resultList.pTypes;
+        vTypes = resultList.vTypes;
+        pValues = resultList.pValues;
+        vValues = resultList.vValues;
+        pRealValues = resultList.pRealValues;
+        vRealValues = resultList.vRealValues;
+        pGlobalIDs = resultList.pGlobalIDs;
+        vGlobalIDs = resultList.vGlobalIDs;
     }
 
     private static float[] convertFloatListToArray(List<Float> list) {
