@@ -53,7 +53,7 @@ Matched to \code{"value"} (the default), \code{"index"}, or \code{"order"}.}
 
 \item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
 the default) or else the superlevel set filtration (via reversing
-\code{x[["values"]]} before paring critical points.}
+\code{x[["values"]]} before pairing critical points).}
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
@@ -78,7 +78,7 @@ internally with the prescribed \code{method}, then restructures the values or
 indices as \link[phutil:persistence]{phutil::persistence} data.
 
 This function may be deprecated once a \code{reeb_graph_pairs} method is
-written for \code{\link[phutil:persistence]{phutil::as_persistence()}}.
+written for \code{\link[phutil:as_persistence]{phutil::as_persistence()}}.
 }
 \examples{
 ex_sf <- system.file("extdata", "running_example.txt", package = "rgph")

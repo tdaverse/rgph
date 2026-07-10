@@ -26,13 +26,16 @@
 #'   homology][reeb_graph_persistence], which is here reformulated following
 #'   Carrière & Oudot (2018).
 #'
-#' @param x A [`reeb_graph`][reeb_graph] object.
+#' @param x A [`reeb_graph`][reeb_graph] object, or for the `matrix` method,
+#'   a 2-column integer matrix of linked vertex pairs (the edgelist).
 #' @inheritParams as_reeb_graph
 #' @param sublevel Logical; whether to use the sublevel set filtration (`TRUE`,
 #'   the default) or else the superlevel set filtration (via reversing
-#'   `x[["values"]]` before paring critical points.
+#'   `x[["values"]]` before pairing critical points).
 #' @param method Character; the pairing method to use. Matched to
 #'   `"single_pass"` (the default) or `"multi_pass"`.
+#' @param values Numeric vector of function values at vertices, required for
+#'   the `matrix` method.
 #' @param n Integer number of critical pairs to print.
 #' @param minlength Minimum name abbreviation length; passed to
 #'   [base::abbreviate()].
@@ -80,6 +83,11 @@
 #' names(x$values) <- letters[seq_along(x$values)]
 #' ( mp <- reeb_graph_pairs(x) )
 #' as.data.frame(mp)
+#'
+#' reeb_graph_pairs(
+#'   matrix(c(1L, 2L, 1L, 3L, 2L, 4L, 3L, 4L), ncol = 2L),
+#'   values = c(0, .4, .6, 1)
+#' )
 #'
 #' @examplesIf rlang::is_installed("network")
 #' library(network)
@@ -143,6 +151,23 @@ reeb_graph_pairs.network <- reeb_graph_pairs_graph
 
 #' @rdname reeb_graph_pairs
 #' @export
+reeb_graph_pairs.matrix <- function(
+    x,
+    sublevel = TRUE,
+    method = c("single_pass", "multi_pass"),
+    values = NULL,
+    ...
+) {
+  if (is.null(values))
+    stop("`values` is required when `x` is a matrix (edgelist).")
+  reeb_graph_pairs.reeb_graph(
+    reeb_graph(values = values, edgelist = x),
+    sublevel = sublevel, method = method
+  )
+}
+
+#' @rdname reeb_graph_pairs
+#' @export
 reeb_graph_pairs.reeb_graph <- function(
     x,
     sublevel = TRUE,
@@ -188,6 +213,8 @@ reeb_graph_pairs.reeb_graph <- function(
     jhw, "V", "mainR",
     vertex_indices_java, vertex_heights_java, edges_from_java, edges_to_java
   )
+  # reclaim intermediate Java objects created during the pairing call
+  .jgc()
 
   # # retrieve the prepopulated list
   # rlist <- .jcall(java_file_path, "[Ljava/lang/String;", "getFinalGraph")

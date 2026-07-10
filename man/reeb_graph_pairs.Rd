@@ -5,6 +5,7 @@
 \alias{reeb_graph_pairs.default}
 \alias{reeb_graph_pairs.igraph}
 \alias{reeb_graph_pairs.network}
+\alias{reeb_graph_pairs.matrix}
 \alias{reeb_graph_pairs.reeb_graph}
 \alias{as.data.frame.reeb_graph_pairs}
 \alias{print.reeb_graph_pairs}
@@ -41,6 +42,14 @@ reeb_graph_pairs(
   ...
 )
 
+\method{reeb_graph_pairs}{matrix}(
+  x,
+  sublevel = TRUE,
+  method = c("single_pass", "multi_pass"),
+  values = NULL,
+  ...
+)
+
 \method{reeb_graph_pairs}{reeb_graph}(
   x,
   sublevel = TRUE,
@@ -55,22 +64,20 @@ reeb_graph_pairs(
 \method{format}{reeb_graph_pairs}(x, ..., n = NULL, minlength = 12L)
 }
 \arguments{
-\item{x}{A \code{\link{reeb_graph}} object.}
+\item{x}{A \code{\link{reeb_graph}} object, or for the \code{matrix} method,
+a 2-column integer matrix of linked vertex pairs (the edgelist).}
 
 \item{sublevel}{Logical; whether to use the sublevel set filtration (\code{TRUE},
 the default) or else the superlevel set filtration (via reversing
-\code{x[["values"]]} before paring critical points.}
+\code{x[["values"]]} before pairing critical points).}
 
 \item{method}{Character; the pairing method to use. Matched to
 \code{"single_pass"} (the default) or \code{"multi_pass"}.}
 
 \item{...}{Additional arguments passed to methods.}
 
-\item{values}{For coercion \emph{to} class \code{reeb_graph}, a character value; the
-node attribute to use as the Reeb graph value function. If \code{NULL} (the
-default), the first numeric node attribute is used. For coercion \emph{from}
-class \code{reeb_graph}, a character value; the name of the node attribute in
-which to store the Reeb graph value function.}
+\item{values}{Numeric vector of function values at vertices, required for
+the \code{matrix} method.}
 
 \item{n}{Integer number of critical pairs to print.}
 
@@ -149,6 +156,11 @@ as.data.frame(mp)
 names(x$values) <- letters[seq_along(x$values)]
 ( mp <- reeb_graph_pairs(x) )
 as.data.frame(mp)
+
+reeb_graph_pairs(
+  matrix(c(1L, 2L, 1L, 3L, 2L, 4L, 3L, 4L), ncol = 2L),
+  values = c(0, .4, .6, 1)
+)
 
 \dontshow{if (rlang::is_installed("network")) withAutoprint(\{ # examplesIf}
 library(network)
