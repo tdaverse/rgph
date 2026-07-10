@@ -93,6 +93,21 @@ public class MergePairingCLI {
                                     float[] vertexWeights,
                                     int[] edgeOriginIds,
                                     int[] edgeDestinationIds) {
+        // Clear static result fields before attempting computation.
+        // If an exception occurs below, stale data from a prior call
+        // must not leak into the results retrieved by the R side.
+        rg = null;
+        pTypes = new ArrayList<>();
+        vTypes = new ArrayList<>();
+        pValues = new ArrayList<>();
+        vValues = new ArrayList<>();
+        pRealValues = new ArrayList<>();
+        vRealValues = new ArrayList<>();
+        pGlobalIDs = new ArrayList<>();
+        vGlobalIDs = new ArrayList<>();
+        finalGraph = null;
+        elapsedTime = 0;
+
         try {
             PairingResult result = TestResults.runAlgo(vertexIds,
                     vertexWeights,
