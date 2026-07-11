@@ -88,10 +88,12 @@ format.reeb_graph <- function(x, ..., n = NULL, minlength = 12L) {
     min(nchar(names(x[["values"]])), na.rm = TRUE)
   )
 
-  edge_ind <- format(as.vector(x[["edgelist"]][seq(n), ]))
-  edge_val <- format(x[["values"]][as.vector(x[["edgelist"]][seq(n), ])])
+  edge_ind <- format(as.vector(x[["edgelist"]][seq(n), , drop = FALSE]))
+  edge_val <-
+    format(x[["values"]][as.vector(x[["edgelist"]][seq(n), , drop = FALSE])])
   if (vnames) {
-    edge_nam <- names(x[["values"]][as.vector(x[["edgelist"]][seq(n), ])])
+    edge_nam <-
+      names(x[["values"]][as.vector(x[["edgelist"]][seq(n), , drop = FALSE])])
     edge_nam <- abbreviate(
       edge_nam, minlength = minlength,
       strict = TRUE, named = FALSE

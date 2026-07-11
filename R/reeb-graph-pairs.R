@@ -321,11 +321,13 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
   )
 
   # vertical components
-  pair_val <- apply(x[["value"]][seq(n), ], 2L, format)
-  pair_ind <- apply(x[["index"]][seq(n), ], 2L, format)
+  pair_val <- apply(x[["value"]][seq(n), , drop = FALSE], 2L, format)
+  pair_ind <- apply(x[["index"]][seq(n), , drop = FALSE], 2L, format)
   if (vnames) {
-    pair_nam <-
-      matrix(attr(x, "vertex_names")[x[["index"]][seq(n), ]], ncol = 2L)
+    pair_nam <- matrix(
+      attr(x, "vertex_names")[x[["index"]][seq(n), , drop = FALSE]],
+      ncol = 2L
+    )
     pair_nam <- abbreviate(
       pair_nam, minlength = minlength,
       strict = TRUE, named = FALSE
@@ -339,7 +341,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
     # high type
     c(
       LEAF_MIN = "", UPFORK = "", LEAF_MAX = "-\u2022 ", DOWNFORK = ">- "
-    )[x[["type"]][seq(n), ]],
+    )[x[["type"]][seq(n), , drop = FALSE]],
     # node info
     pair_ind,
     if (vnames) paste0("[", pair_nam, "]"),
@@ -347,7 +349,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
     # low type
     c(
       LEAF_MIN = " \u2022-", UPFORK = " -<", LEAF_MAX = "", DOWNFORK = ""
-    )[x[["type"]][seq(n), ]]
+    )[x[["type"]][seq(n), , drop = FALSE]]
   ), ncol = 2L)
   pair_fmt <- apply(pair_fmt, 1L, paste, collapse = " ... ")
 
