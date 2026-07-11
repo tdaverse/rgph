@@ -314,7 +314,7 @@ format.reeb_graph_pairs <- function(x, ..., n = NULL, minlength = 12L) {
   vnames <- ! is.null(attr(x, "vertex_names"))
 
   # formatting decisions
-  if (is.null(n)) n <- min(npairs, 12L)
+  n <- min(npairs, if (is.null(n)) 12L else n)
   if (vnames) minlength <- min(
     minlength,
     min(nchar(attr(x, "vertex_names")), na.rm = TRUE)
