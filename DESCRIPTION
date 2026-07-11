@@ -1,7 +1,7 @@
 Package: rgph
 Type: Package
 Title: Pair Critical Points and Compute Persistent Homology of Reeb Graphs
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person(
       "Satyajit", "Mohanty",

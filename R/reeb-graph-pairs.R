@@ -285,7 +285,7 @@ check_reeb_graph_pairs <- function(x) {
     length(x) == 4L,
     all(names(x) == c("type", "value", "index", "order")),
     length(unique(vapply(x, nrow, 0L))) == 1L,
-    identical(colnames(x[["type"]]), c("lo", "hi")),
+    all(unique(t(sapply(x, colnames))) == c("lo", "hi")),
     all(x[["type"]] %in% c("LEAF_MIN", "DOWNFORK", "LEAF_MAX", "UPFORK")),
     is.numeric(x[["value"]]),
     is.integer(x[["index"]]),
