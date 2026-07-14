@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/rgph)](https://CRAN.R-project.org/package=rgph)
 <!-- badges: end -->
 
 Reeb graphs arise as low-dimensional quotients of topological spaces by level set--based equivalence.
@@ -26,14 +27,18 @@ The Reeb graph's topological structure is informative of that of the original sp
 
 ## Installation
 
-You can install the development version of **rgph** from [GitHub](https://github.com/) with:
+**rgph** is now on [CRAN](https://cran.r-project.org/package=rgph)! You can install the latest release with:
+
+```r
+install.packages("rgph")
+```
+
+You can also install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
 pak::pak("tdaverse/rgph")
 ```
-
-We expect to submit to CRAN soon!
 
 ## Example
 
