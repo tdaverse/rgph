@@ -11,11 +11,11 @@ esac
 
 # Address issue with using plain `R` below
 # https://stackoverflow.com/a/75543023
-R_HOME="$R_HOME/bin/R"
+R_BIN="$R_HOME/bin/R"
 
 # Prefer R-configured tools; fall back to PATH
-JAVAC="$(R_HOME CMD config JAVAC || true)"; [ -z "$JAVAC" ] && JAVAC="$(command -v javac || echo javac)"
-JAR="$(R_HOME CMD config JAR || true)";     [ -z "$JAR" ]   && JAR="$(command -v jar   || echo jar)"
+JAVAC="$(R_BIN CMD config JAVAC || true)"; [ -z "$JAVAC" ] && JAVAC="$(command -v javac || echo javac)"
+JAR="$(R_BIN CMD config JAR || true)";     [ -z "$JAR" ]   && JAR="$(command -v jar   || echo jar)"
 
 SRC_DIR="java/src"
 CLS_DIR="inst/java/classes"
