@@ -116,7 +116,7 @@ as_igraph <- function(x, ...) UseMethod("as_igraph")
 as_igraph.reeb_graph <- function(x, values = "value", names = "name", ...) {
   g <- igraph::graph_from_edgelist(x$edgelist)
   igraph::vertex_attr(g, values) <- unname(x$values)
-  if (! is.null(names))
+  if (! is.null(names) && ! is.null(names(x$values)))
     igraph::vertex_attr(g, names) <- names(x$values)
   g
 }

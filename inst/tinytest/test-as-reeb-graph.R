@@ -72,6 +72,18 @@ if (rlang::is_installed("igraph")) {
   expect_identical(igraph::vertex_attr(g, "name"), names(ht))
 }
 
+# `as_igraph()` does not set a "name" attribute when values are unnamed
+
+if (rlang::is_installed("igraph")) {
+  rg_named <- reeb_graph(values = ht, edgelist = c( 1,2, 2,3 ))
+  g_named <- as_igraph(rg_named, values = "height")
+  expect_equal(igraph::vertex_attr(g_named, "name"), names(ht))
+
+  rg_unnamed <- reeb_graph(values = unname(ht), edgelist = c( 1,2, 2,3 ))
+  g_unnamed <- as_igraph(rg_unnamed, values = "height")
+  expect_null(igraph::vertex_attr(g_unnamed, "name"))
+}
+
 if (rlang::is_installed("network")) {
   net <- as_network(rg, values = "height")
   expect_true(all( as.matrix(net, matrix.type = "edgelist") == rg$edgelist ))
