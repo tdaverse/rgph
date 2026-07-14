@@ -7,6 +7,8 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/rgph)](https://CRAN.R-project.org/package=rgph)
 <!-- badges: end -->
 
 Reeb graphs arise as low-dimensional quotients of topological spaces by
@@ -23,15 +25,20 @@ extended persistent homology, and methods to accommodate `igraph` and
 
 ## Installation
 
-You can install the development version of **rgph** from
+**rgph** is now on [CRAN](https://cran.r-project.org/package=rgph)! You
+can install the latest release with:
+
+``` r
+install.packages("rgph")
+```
+
+You can also install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("pak")
 pak::pak("tdaverse/rgph")
 ```
-
-We expect to submit to CRAN soon!
 
 ## Example
 
@@ -47,7 +54,7 @@ an installed data file:
 
 ``` r
 ( ex_file <- system.file("extdata/running_example.txt", package = "rgph") )
-#> [1] "/Library/Frameworks/R.framework/Versions/4.2/Resources/library/rgph/extdata/running_example.txt"
+#> [1] "/Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library/rgph/extdata/running_example.txt"
 ( ex_reeb <- read_reeb_graph(ex_file) )
 #> Reeb graph with 16 vertices and 18 edges on [0,15]:
 #>  1 ( 0) --  3 ( 2)
