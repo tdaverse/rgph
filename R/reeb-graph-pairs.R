@@ -213,8 +213,6 @@ reeb_graph_pairs.reeb_graph <- function(
     jhw, "V", "mainR",
     vertex_indices_java, vertex_heights_java, edges_from_java, edges_to_java
   )
-  # reclaim intermediate Java objects created during the pairing call
-  .jgc()
 
   # # retrieve the prepopulated list
   # rlist <- .jcall(java_file_path, "[Ljava/lang/String;", "getFinalGraph")

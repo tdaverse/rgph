@@ -18,7 +18,6 @@ A `matrix` method for `reeb_graph_pairs()` takes the same input as `as_reeb_grap
 
 `reeb_graph_pairs()` is revised as follows:
 * uses full strings for Java class names
-* collects garbage via `.jgc()` after computing pairs via `.jcall()`
 * coerces index values to integer (before adding 1)
 
 `MergePairingCLI.mainR()` and `PPPairingCLI.mainR()` are revised as follows:
