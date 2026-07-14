@@ -6,7 +6,7 @@ This upgrade was supported by OpenCode.
 
 ### bug fixes and refactors
 
-An unconditional nullification of `name` in `as_reeb_graph.igraph()` was removed.
+An unconditional nullification of `name` in `as_reeb_graph.igraph()` was removed, and an imprecise conditional for assigning `"name"` in `as_igraph.reeb_graph()` was fixed.
 
 ### new features
 
