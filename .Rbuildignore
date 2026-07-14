@@ -9,6 +9,7 @@ java/.idea
 ^README\.Rmd$
 ^cran-comments.md$
 ^LICENSE.txt$
+^CRAN-SUBMISSION$
 
 # website
 ^_pkgdown.yml$
